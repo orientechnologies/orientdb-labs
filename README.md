@@ -4,7 +4,7 @@
 
 ## Quick Navigation
 
-### Index of conten
+### Index of contents
 - [Studio](Studio-Home-page.md) web tool (Enterprise Edition)
   - [Dashboard](Studio-Dashboard.md)  
   - [Server Management](Studio-Server-Management.md)
@@ -23,7 +23,8 @@
     - [Table Per Concrete Class Inheritance](Teleporter-Table-Per-Concrete-Class-Inheritance.md)
 
 ### Quick References
-- [OrientDB Manual](https://github.com/orientechnologies/orientdb-docs/blob/master/README.md)
+- [OrientDB Manual](http://orientdb.com/docs/last/index.html)
+- [OrientDB Site](http://orientdb.com/)
 
 ### Resources
 - [User Group](http://orientdb.com/active-user-community) - Have question, troubles, problems?
@@ -35,9 +36,9 @@
 - [Contribute](Contribute-to-OrientDB.md) - Contribute to the project.
 - [Who is using OrientDB?](http://orientdb.com/customers) - Clients using OrientDB in production.
 
+
 ## Questions or Need Help?
 Check out our [Get in Touch](Get-in-Touch.md) page for different ways of getting in touch with us.
-
 
 ## Releases
 - [v1.7.8](http://orientdb.com/docs/1.7.8/)
