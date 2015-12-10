@@ -5,16 +5,6 @@
 
 Teleporter is fully compatible with several RDBMS that have a JDBC driver: we successfully tested Teleporter with Oracle, SQLServer, MySQL, PostgreSQL and HyperSQL. Teleporter manages all the necessary type conversions between the different DBMSs and imports all your data as Graph in OrientDB.
 
-## Contents
-1. [Getting Started](https://github.com/orientechnologies/teleporter/wiki)
-2. [Execution Strategies](https://github.com/orientechnologies/teleporter/wiki/Execution-Strategies)
-3. [Sequential Executions and One-Way Synchronizer](https://github.com/orientechnologies/teleporter/wiki/Sequential-Executions-and-One-Way-Synchronizer)
-4. [Inheritance](https://github.com/orientechnologies/teleporter/wiki/Inheritance)    
-   4.1. [Single Table Inheritance](https://github.com/orientechnologies/teleporter/wiki/Inheritance-patterns:-Single-Table-Inheritance)     
-   4.2. [Table Per Class Inheritance](https://github.com/orientechnologies/teleporter/wiki/Inheritance-patterns:-Table-Per-Class-Inheritance)      
-   4.3. [Table Per Concrete Class Inheritance](https://github.com/orientechnologies/teleporter/wiki/Inheritance-patterns:-Table-Per-Concrete-Class-Inheritance)
-5. [Installation and Configuration](https://github.com/orientechnologies/teleporter/wiki/Installation-and-Configuration)
-
 ## How Teleporter works
 Teleporter looks for the specific DBMS meta-data in order to perform a logical inference of the source DB schema for the building of a corresponding graph model. Eventually the data importing phase is performed.
 
