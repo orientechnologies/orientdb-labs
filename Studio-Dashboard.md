@@ -5,7 +5,7 @@ The Dashboard shows a graphical presentation of the current status and historica
 
 Here you can see the Dashboard reporting the status of a cluster composed of two nodes.
 
-![](images/studio-dashboard-screen1.png)
+![](images/studio-dashboard.png)
 
 
 
