@@ -91,7 +91,7 @@ Teleporter execution consists of 4 steps:
 3. **OrientDB Schema Writing:** the OrientDB schema is written according to the Graph Model in memory.      
 4. **OrientDB importing:** importing data from source database to OrientDB.
 
-Thus the whole workflow is
+Thus the whole workflow is:
 
 ![Whole Workflow](images/teleporter-whole-workflow.png)
 
