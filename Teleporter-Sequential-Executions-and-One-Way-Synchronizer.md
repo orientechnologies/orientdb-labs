@@ -6,7 +6,7 @@ Teleporter is conceived to support many sequential executions from the same sour
 
 A sample migration scenario is reported below:
 
-![Migration Scenario](images/teleporter-migration.png)
+![Migration Scenario](images/teleporter-migration1.png)![Migration Scenario](images/teleporter-migration2.png)
 
 ##Synchronization policy
 Teleporter propagates the applied changes of the source DB both for the schema and for the records following the policy described below:       
