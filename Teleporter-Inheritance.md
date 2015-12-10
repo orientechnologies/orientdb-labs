@@ -5,9 +5,9 @@ At the moment **Hibernate's syntax** is supported, and you can exploit this feat
 
 ## Inheritance Patterns in Relational Databases
 Because relational databases have no concept of inheritance, there isn't a standard way of implementing inheritance in a database, so the hardest part of persisting inheritance is choosing how to represent the inheritance in the database. There are three main patterns commonly used:
-- [**Single Table Inheritance**](https://github.com/orientechnologies/teleporter/wiki/Inheritance-patterns:-Single-Table-Inheritance)
-- [**Table Per Class Inheritance**](https://github.com/orientechnologies/teleporter/wiki/Inheritance-patterns:-Table-Per-Class-Inheritance)
-- [**Table Per Concrete Class Inheritance**](https://github.com/orientechnologies/teleporter/wiki/Inheritance-patterns:-Table-Per-Concrete-Class-Inheritance)
+- [**Single Table Inheritance**](Single-Table-Inheritance.md)
+- [**Table Per Class Inheritance**](Table-Per-Class-Inheritance.md)
+- [**Table Per Concrete Class Inheritance**](Table-Per-Concrete-Class-Inheritance.md)
 
 Teleporter can faithfully reproduce all inheritance relationships present in your source DB using the argument **'-inheritance'** and the following the syntax:
 ```
