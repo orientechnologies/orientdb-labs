@@ -5,7 +5,7 @@
 ## Quick Navigation
 
 ### Index of conten
-- [Studio](Studio-Home-Page.md) web tool (Enterprise Edition)
+- [Studio](Studio-Home-page.md) web tool (Enterprise Edition)
   - [Dashboard](Studio-Dashboard.md)  
   - [Server Management](Studio-Server-Management.md)
   - [Cluster Management](Studio-Cluster-Management.md)
