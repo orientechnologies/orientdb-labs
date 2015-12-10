@@ -9,7 +9,7 @@ http://localhost:2480
 ```
 
 
-This is the new Studio 2.0 Homepage. 
+This is the Studio 2.2 Homepage. 
 
 ![Home Page](images/studio-login.png)
 
@@ -67,7 +67,7 @@ Once created, Studio will automatically login to the new database.
 
 ## Import a public database
 
-Studio 2.0 allows you to import databases from a public repository.
+Studio 2.2 allows you to import databases from a public repository.
 These databases contains public data and bookmarked queries that will allow you to start
 playing with OrientDB and OrientDB SQL. The classic bundle database 'GratefulDeadConcerts' will be moved to this public repository.
 
