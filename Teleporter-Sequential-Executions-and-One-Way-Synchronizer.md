@@ -4,6 +4,10 @@ Teleporter is conceived to support many sequential executions from the same sour
 - **personalize your import,** combining the different strategies and settings by including or excluding the chosen tables and by running Teleport more times in order to obtain a more complex and customized import strategy
 - **use it as a one-way synchronizer** and maintain a copy of your DB: all the changes applied to the source DB (primary DB) are propagated to the imported graph DB, but not vice versa.
 
+A sample migration scenario is reported below:
+
+![Migration Scenario](images/teleporter-migration.png)
+
 ##Synchronization policy
 Teleporter propagates the applied changes of the source DB both for the schema and for the records following the policy described below:       
 
