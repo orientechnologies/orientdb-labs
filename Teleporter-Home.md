@@ -93,4 +93,4 @@ Teleporter execution consists of 4 steps:
 
 Below is reported a Teleporter execution dump:             
 
-![Execution Dump](https://github.com/orientechnologies/orientdb-docs/blob/master/source/images/teleporter-execution-dump.png)
+![Execution Dump](images/teleporter-execution-dump.png)
