@@ -5,13 +5,13 @@
 ## Quick Navigation
 
 ### Index of contents
-- [Studio](Studio-Home-page.md) web tool (Enterprise Edition)
-  - [Dashboard](Studio-Dashboard.md)  
-  - [Server Management](Studio-Server-Management.md)
-  - [Cluster Management](Studio-Cluster-Management.md)
-  - [Query Profiler](Studio-Query-Profiler.md)
-  - [Studio Auditing](Studio-Auditing.md)
-  - [Teleporter](Studio-Teleporter.md)
+- [Studio](Studio-Home-page.md) web tool 
+  - [Dashboard](Studio-Dashboard.md) (Enterprise Edition)
+  - [Server Management](Studio-Server-Management.md) (Enterprise Edition)
+  - [Cluster Management](Studio-Cluster-Management.md) (Enterprise Edition)
+  - [Query Profiler](Studio-Query-Profiler.md) (Enterprise Edition)
+  - [Studio Auditing](Studio-Auditing.md) (Enterprise Edition)
+  - [Teleporter](Studio-Teleporter.md) (Enterprise Edition)
 - [Teleporter](Teleporter-Home.md) migration tool
   - [Installation and configuration](Teleporter-Installation-and-Configuration.md)
   - [Execution strategies](Teleporter-Execution-Strategies.md)
