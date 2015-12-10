@@ -11,7 +11,7 @@ http://localhost:2480
 
 This is the new Studio 2.0 Homepage. 
 
-![Home Page](images/login.png)
+![Home Page](images/studio-login.png)
 
 From here, you can :
 
@@ -46,7 +46,7 @@ $ORIENTDB_HOME/config/orientdb-server-config.xml file:
 
 To create a new database, click the "New DB" button from the Home Page 
 
-![Home Page](images/newDb.png)
+![Home Page](images/studio-newDb.png)
 
 Some information is needed to create a new database:
 
@@ -71,7 +71,7 @@ Studio 2.0 allows you to import databases from a public repository.
 These databases contains public data and bookmarked queries that will allow you to start
 playing with OrientDB and OrientDB SQL. The classic bundle database 'GratefulDeadConcerts' will be moved to this public repository.
 
-![Home Page](images/importPublic.png)
+![Home Page](images/studio-importPublic.png)
 
 To install a public database, you will need the Server Credentials. 
 Then, click the download button of the database that you are interested in.
