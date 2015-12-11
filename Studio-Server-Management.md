@@ -15,7 +15,7 @@ This panel summarizes all the most important information about the current clust
 ![Overview](images/studio-server-management-overview.png)
 
 ## Connections
-Displays all the active connections to the server. For each connection reports the following information:
+It displays all the active connections to the server. For each connection reports the following information:
 - `Session ID`, as the unique session number
 - `Client`, as the unique client number
 - `Address`, is the connection source
@@ -56,12 +56,12 @@ This panel shows all the metric in 4 different tabs. To know more about metrics 
 ![Metrics-Hook](images/studio-server-management-metrics-hook.png)
 
 ## Databases
-Lists all databases created on the server. It is possible make a backup using the specific option.
+It lists all databases created on the server. It is possible make a backup using the specific option.
 
 ![Databases](images/studio-server-management-databases.png)
 
 ## Warnings
-List all warning messages. For each you can see:
+It list all warning messages. For each you can see:
 - `Warning`, the warning message
 - `Count`, the number of that warnings
 - `Last Time`, the timestamp of the last warning message
@@ -69,7 +69,7 @@ List all warning messages. For each you can see:
 ![Warnings](images/studio-server-management-warnings.png)
 
 ## Logs
-This panel shows all the logs present on the server. Information in each log line are presented divided as follows:
+This panel shows all the logs present on the server. The information in each log row are presented divided as follows:
 - `Day`
 - `Hour`
 - `Type`
@@ -81,7 +81,7 @@ Moreover you can filter log messages through the specific panel, typing differen
 ![Logs](images/studio-server-management-logs.png)
 
 ## Plugins
-Helps you with the configuration of a new plugin, avoiding to edit the orientdb-server-config.xml configuration file.
+It helps you with the configuration of a new plugin, avoiding to edit the orientdb-server-config.xml configuration file.
 
 ![Plugins](images/studio-server-management-plugins.png)
 
