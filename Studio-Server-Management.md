@@ -1,7 +1,9 @@
 # Server Management
-This is the section to work with OrientDB Server as DBA/DevOps. Starting from OrientDB 2.1 Studio has been enriched of features taken from the [Enterprise Edition](http://orientdb.com/enterprise/).
+This is the section to work with OrientDB Server as DBA/DevOps. This control panel coming from OrientDB 2.1 Studio has been enriched with several new features for the new [Enterprise Edition](http://orientdb.com/enterprise/).
 
-## Statistics
+On the top of the page you can chose your server and then navigate all statistics and information related to it.
+
+## Overview
 This page summarizes all the most important information about the current server and the other servers connected in cluster if any:
 - `Server status`
 - `Operations per second`
@@ -10,7 +12,7 @@ This page summarizes all the most important information about the current server
 - `CPU`, `RAM` and `DISK` used
 - `Live chart` with CRUD operations in real-time
 
-![Statistics](images/studio-stats-2servers.png)
+![Overview](images/studio-server-management-overview.png)
 
 ## Connections
 Displays all the active connections to the server. Each connection reports the following information:
@@ -34,21 +36,34 @@ Displays all the active connections to the server. Each connection reports the f
 
 Each session can be interrupted or even killed.
 
-![Connections](images/studio-conns.png)
+![Connections](images/studio-server-management-connections.png)
+
+## Metrics
+This panel shows 
+
+![Metrics](images/studio-server-management-metrics.png)
+
+## Databases
+This panel shows 
+
+![Databases](images/studio-server-management-databases.png)
+
+## Warnings
+This panel shows 
+
+![Warnings](images/studio-server-management-warnings.png)
+
+## Logs
+This panel shows 
+
+![Logs](images/studio-server-management-logs.png)
+
+## Plugins
+This panel shows 
+
+![Plugins](images/studio-server-management-plugins.png)
 
 ## Configuration
-This panel shows the Server settings divided in two boxes:
-- `Properties`, as the custom settings in `config/orientdb-server-config.xml` file
-- `Global Configuration`, as all the global configuration. Only few of them can be changed at run-time with the "Save" button
+This panel shows 
 
-![Configuration](images/studio-configuration.png)
-
-## Storages
-This panel shows the [storages](Concepts.md#storage) used by the server. Below the information reported per storage:
-- `Name`, is the storage name
-- `Type`, where `OLocalPaginatedStorage` (plocal) means persstent and `ODirectMemoryStorage` (memory) is in memory only
-- `Path`, as the path on server's file system where the storage is located
-- `Active Users`. This infomation couldn't be updated with the real number of users that are using the database
-
-![Storage](images/studio-dbs.png)
-
+![Configuration](images/studio-server-management-configuration.png)
