@@ -38,7 +38,7 @@ Displays all the active connections to the server. Each connection reports the f
 ![Connections](images/studio-server-management-connections.png)
 
 ## Metrics
-This panel shows all the metric in 4 different tabs:
+This panel shows all the metric in 4 different tabs. To know more about metrics you can view the [Profiler](https://github.com/orientechnologies/orientdb-docs/blob/master/Profiler.md) page on the [OrientDB Manual](http://orientdb.com/docs/last/index.html).
 - `Chronos`,
 
 ![Metrics-Chronos](images/studio-server-management-metrics-chronos.png)
