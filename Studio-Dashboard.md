@@ -5,10 +5,6 @@ The Dashboard shows a graphical presentation of the current status and historica
 
 Here you can see the Dashboard reporting the status of a cluster composed of two nodes.
 
-![](images/studio-dashboard.png)
-
-
-
 For each node you can monitor several information divided into main sections:
 - System report
   - `CPU`, `RAM`, `DISK CACHE` and `DISK` used
@@ -20,3 +16,6 @@ For each node you can monitor several information divided into main sections:
   - `Warnings`
 
 - CRUD operations history: includes a `Live Chart` of CRUD operations in real time.
+
+
+![](images/studio-dashboard.png)
