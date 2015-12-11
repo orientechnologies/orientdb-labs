@@ -76,7 +76,7 @@ This panel shows all the logs present on the server. Information of each line ar
 - `File`
 - `Info`
 
-Moreover you can perform a search through the specific panel, typing different parameters.
+Moreover you can filter log messages through the specific panel, typing different parameters.
 
 ![Logs](images/studio-server-management-logs.png)
 
