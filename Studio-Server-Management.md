@@ -1,7 +1,7 @@
 # Server Management
 This is the section to work with OrientDB Server as DBA/DevOps. This control panel coming from OrientDB 2.1 Studio has been enriched with several new features for the new [Enterprise Edition](http://orientdb.com/enterprise/).
 
-On the top of the page you can chose your server (system information are reported) and then navigate all statistics and information related to it through the available tabs.
+On the top of the page you can chose your server visualize its system information and then navigate all statistics and facts related to it through the available tabs.
 
 ## Overview
 This panel summarizes all the most important information about the current cluster:
@@ -56,20 +56,20 @@ This panel shows all the metric in 4 different tabs:
 ![Metrics-Hook](images/studio-server-management-metrics-hook.png)
 
 ## Databases
-This panel lists all databases created and present on the server. It is possible make a backup using the specific option.
+Lists all databases created and present on the server. It is possible make a backup using the specific option.
 
 ![Databases](images/studio-server-management-databases.png)
 
 ## Warnings
-This panel list all warning messages. For each you can see:
+List all warning messages. For each you can see:
 - `Warning`, the warning message.
-- `Count`, the number of messages.
-- `Last Time`, the last message timestamp.
+- `Count`, the number of that warnings.
+- `Last Time`, the timestamp of the last warning message.
 
 ![Warnings](images/studio-server-management-warnings.png)
 
 ## Logs
-This panel shows all the logs present on the server. Information of each line are presented divided as follows:
+This panel shows all the logs present on the server. Information in each log line are presented divided as follows:
 - `Day`
 - `Hour`
 - `Type`
@@ -81,11 +81,11 @@ Moreover you can filter log messages through the specific panel, typing differen
 ![Logs](images/studio-server-management-logs.png)
 
 ## Plugins
-This panel helps you with the configuration of a new plugin, avoiding to edit the orientdb-server-config.xml configuration file.
+Helps you with the configuration of a new plugin, avoiding to edit the orientdb-server-config.xml configuration file.
 
 ![Plugins](images/studio-server-management-plugins.png)
 
 ## Configuration
-This panel shows 
+You can consult the configuration of the server contained in the orientdb-server-config.xml file (read-only mode).
 
 ![Configuration](images/studio-server-management-configuration.png)
