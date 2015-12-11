@@ -51,7 +51,7 @@ This panel shows all the metric in 4 different tabs. To know more about metrics 
 
 ![Metrics-Stats](images/studio-server-management-metrics-stats.png)
 
-- `Hook Values`,
+- `Hook Values`
 
 ![Metrics-Hook](images/studio-server-management-metrics-hook.png)
 
@@ -81,11 +81,11 @@ Moreover you can filter log messages through the specific panel, typing differen
 ![Logs](images/studio-server-management-logs.png)
 
 ## Plugins
-It helps you with the configuration of a new plugin, avoiding to edit the orientdb-server-config.xml configuration file.
+It helps you with the configuration of a new plugin, avoiding to edit the `config/orientdb-server-config.xml` configuration file.
 
 ![Plugins](images/studio-server-management-plugins.png)
 
 ## Configuration
-You can consult the configuration of the server contained in the orientdb-server-config.xml file (read-only mode).
+You can consult in read-only mode the configuration of the server contained in the `config/orientdb-server-config.xml` file.
 
 ![Configuration](images/studio-server-management-configuration.png)
