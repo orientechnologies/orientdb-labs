@@ -1,4 +1,4 @@
-# Cluster Management (Enterprise only)
+# Cluster Management
 This is the section to work with OrientDB Cluster as DBA/DevOps. This is an exclusive feature introduced in OrientDB 2.2 Studio specifically for the [Enterprise Edition](http://orientdb.com/enterprise/).
 
 On the top of the page are reported the number of active nodes joining your cluster.
