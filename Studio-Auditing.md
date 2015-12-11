@@ -1,4 +1,4 @@
-# Auditing (Enterprise only)
+# Auditing
 
 Studio 2.2 includes a functionality called [Auditing](Auditing.md). To understand how Auditing works, please read the [Auditing](https://github.com/orientechnologies/orientdb-docs/blob/master/Auditing.md) page on the [OrientDB Manual](http://orientdb.com/docs/last/index.html).
 
