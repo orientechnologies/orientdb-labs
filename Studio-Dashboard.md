@@ -1,4 +1,4 @@
-# Dashboard
+# Dashboard (Enterprise Edition)
 
 Studio 2.2 includes a new easy to read and single-page Dashboard with costantly updated reports.
 The Dashboard shows a graphical presentation of the current status and historical trends of each node joining your cluster. Performance indicators are reported in order to enable instantaneous and informed decisions which you can make at a glance.
