@@ -8,19 +8,19 @@ This panel shows all the query executed on a specific server grouped by command 
 - `Type`, as the query type
 - `Command`, as the content of the query
 - `Users`, as the users who executed the query
-- `Entries`, as the number of entries
-- `Average`,
-- `Total`,
-- `Max`,
-- `Min`,
-- `Last`,
-- `Last execution`, the timestamp of the query last execution
+- `Entries`, as the number of times the query it was executed
+- `Average`, as the average required time by the queries
+- `Total`, asthe total required time by all the queries
+- `Max`, as the maximum required time
+- `Min`, as the minimum required time
+- `Last`, as the time required by the last query
+- `Last execution`, as the timestamp of the last query execution
 
 
 ![Query](images/studio-queryprofiler-query.png)
 
 ## Command Cache
-Through this panel you can manage the cache of the specific server and consult the cached results to the queries.
-You can filter the queries by ? and purge the whole cache.
+Through this panel you can manage the cache of the specific server and consult the cached query results.
+You can filter the queries by the "Query" field and purge the whole cache.
 
 ![Command Cache](images/studio-queryprofiler-commandcache.png)
