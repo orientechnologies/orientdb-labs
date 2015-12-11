@@ -4,7 +4,7 @@ This is the section to work with OrientDB Cluster as DBA/DevOps. This is an excl
 On the top of the page are reported the number of active nodes joining your cluster.
 
 ## Overview
-This page summarizes all the most important information about all servers connected in cluster:
+This page summarizes all the most important information about all servers connected to the cluster:
 - `CPU`, `RAM`, `DISK CACHE` and `DISK` used
 - `Status`
 - `Operations per second`
