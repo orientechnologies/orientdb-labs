@@ -11,15 +11,12 @@ Here you can see the Dashboard reporting the status of a cluster composed of two
 
 For each node you can monitor several information divided into main sections:
 - System report
-  - CPU usage
-  - RAM usage
-  - DISK CACHE usage
-  - DISK usage
-  - Node Status: ONLINE or OFFLINE
-  - Active Connections
-  - Average Latency
-  - Operations/sec
-  - Network Request
-  - Warning Messages
+  - `CPU`, `RAM`, `DISK CACHE` and `DISK` used
+  - `Status` of the node
+  - `Operations per second`
+  - `Active Connections`
+  - `Network Request`
+  - `Average Latency`
+  - `Warnings`
 
-- CRUD operations history: includes a graphic representation of CRUD operations history.
+- CRUD operations history: includes a `Live Chart` of CRUD operations in real time.
