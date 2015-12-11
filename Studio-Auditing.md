@@ -1,6 +1,6 @@
 # Auditing (Enterprise only)
 
-Studio 2.1 includes a new functionality called [Auditing](Auditing.md). To understand how Auditing works, please read the [Auditing](Auditing.md) page.
+Studio 2.2 includes a new functionality called [Auditing](Auditing.md). To understand how Auditing works, please read the [Auditing](https://github.com/orientechnologies/orientdb-docs/blob/master/Auditing.md) page on the [OrientDB Manual](http://orientdb.com/docs/last/index.html).
 
 Studio Auditing panel helps on Auditing configuration, avoiding to edit the `auditing-config.json` file.
 
