@@ -48,11 +48,14 @@ This panel shows all the metric in 4 different tabs. To know more about metrics 
 ![Metrics-Counters](images/studio-server-management-metrics-counters.png)
 
 - `Stats`,
-  - `Stats`
-  - - `Stats`
-  - - `Stats`
-  - - `Stats`
-  - - `Stats`
+  - `Name`, as
+  - `Entries`, as
+  - `Average`, as
+  - `Total`, as
+  - `Max`, as
+  - `Min`, as
+  - `Last`, as
+  - `Last Execution`, as
 
 ![Metrics-Stats](images/studio-server-management-metrics-stats.png)
 
