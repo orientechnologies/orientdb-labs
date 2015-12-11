@@ -38,7 +38,7 @@
 
 
 ## Questions or Need Help?
-Check out our [Get in Touch](Get-in-Touch.md) page for different ways of getting in touch with us.
+Check out our [Get in Touch](https://github.com/orientechnologies/orientdb-docs/blob/master/Get-in-Touch.md) page for different ways of getting in touch with us.
 
 ## Releases
 - [v1.7.8](http://orientdb.com/docs/1.7.8/)
