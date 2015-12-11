@@ -62,9 +62,9 @@ Lists all databases created and present on the server. It is possible make a bac
 
 ## Warnings
 List all warning messages. For each you can see:
-- `Warning`, the warning message.
-- `Count`, the number of that warnings.
-- `Last Time`, the timestamp of the last warning message.
+- `Warning`, the warning message
+- `Count`, the number of that warnings
+- `Last Time`, the timestamp of the last warning message
 
 ![Warnings](images/studio-server-management-warnings.png)
 
