@@ -5,10 +5,10 @@ In the bottom section you can choose the server in order to investigate queries 
 
 ## Query
 This panel shows all the query executed on a specific server grouped by command content. For each query the following information are reported:
-- `Type`, the query type
-- `Command`, the content of the query
-- `Users`, the users who executed the query
-- `Entries`, number of entries
+- `Type`, as the query type
+- `Command`, as the content of the query
+- `Users`, as the users who executed the query
+- `Entries`, as the number of entries
 - `Average`,
 - `Total`,
 - `Max`,
