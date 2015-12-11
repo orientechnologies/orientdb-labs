@@ -1,7 +1,7 @@
 # Server Management
 This is the section to work with OrientDB Server as DBA/DevOps. This control panel coming from OrientDB 2.1 Studio has been enriched with several new features for the new [Enterprise Edition](http://orientdb.com/enterprise/).
 
-On the top of the page you can chose your server visualize its system information and then navigate all statistics and facts related to it through the available tabs.
+On the top of the page you can chose your server, visualize its system information and then navigate all statistics and facts related to it through the available tabs.
 
 ## Overview
 This panel summarizes all the most important information about the current cluster:
