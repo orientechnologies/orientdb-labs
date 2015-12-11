@@ -4,12 +4,14 @@ This is the section to work with OrientDB Cluster as DBA/DevOps. This is an excl
 On the top of the page are reported the number of active nodes joining your cluster.
 
 ## Overview
-This page summarizes all the most important information about the current server and the other servers connected in cluster if any:
-- `Server status`
+This page summarizes all the most important information about all servers connected in cluster:
+- `CPU`, `RAM`, `DISK CACHE` and `DISK` used
+- `Status`
 - `Operations per second`
 - `Active Connections`
+- `Network Requests`
+- `Average Latency`
 - `Warnings`
-- `CPU`, `RAM` and `DISK` used
 - `Live chart` with CRUD operations in real-time
 
 ![Overview](images/studio-cluster-management-overview.png)
@@ -25,6 +27,6 @@ Through the configuration box above you can change in real time the current clus
 - `Failure Available Nodes Less Quorum`
 - `Server Roles`, roles may be "Master" or "Replica"
 
-If you want know more about these configuration parameters view the [Distributed Configuration](https://github.com/orientechnologies/orientdb-docs/blob/master/Distributed-Configuration.md) page.
+If you want know more about these configuration parameters you can view the [Distributed Configuration](https://github.com/orientechnologies/orientdb-docs/blob/master/Distributed-Configuration.md) page.
 
 ![Databases](images/studio-cluster-management-databases.png)
