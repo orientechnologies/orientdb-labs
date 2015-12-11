@@ -18,7 +18,8 @@ This page summarizes all the most important information about all servers connec
 
 ## Databases
 In this panel you can see all databases present on each server joining your cluster.
-Through the configuration box above you can change in real time the current cluster configuraton, without touching the default-distributed-db-config.json file content. You can set the following parameters:
+Through the box above you can change in real time the current cluster configuration, without touching the `config/default-distributed-db-config.json` file content. 
+You can set the following parameters:
 - `Write Quorum`
 - `Read Quorum`
 - `Auto Deploy`
