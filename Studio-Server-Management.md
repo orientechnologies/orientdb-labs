@@ -4,12 +4,12 @@ This is the section to work with OrientDB Server as DBA/DevOps. This control pan
 On the top of the page you can chose your server and then navigate all statistics and information related to it.
 
 ## Overview
-This page summarizes all the most important information about the current server and the other servers connected in cluster if any:
-- `Server status`
+This panel summarizes all the most important information about the current cluster:
+- `CPU`, `RAM`, `DISK CACHE` and `DISK` used
+- `Status`
 - `Operations per second`
 - `Active Connections`
 - `Warnings`
-- `CPU`, `RAM` and `DISK` used
 - `Live chart` with CRUD operations in real-time
 
 ![Overview](images/studio-server-management-overview.png)
@@ -30,18 +30,30 @@ Displays all the active connections to the server. Each connection reports the f
 - `Last Execution Time`, is the execution time o last request
 - `Total Working Time`, is the total execution time taken by current connection so far
 - `Connected Since`, is the date when the connection has been created
-- `Protocol`, is the protocol between [HTTP](OrientDB-REST.md) and [Binary](Network-Binary-Protocol.md)
+- `Protocol`, is the protocol among [HTTP](OrientDB-REST.md) and [Binary](Network-Binary-Protocol.md)
 - `Client ID`, a text representing the client connection
 - `Driver`, the driver name
-
-Each session can be interrupted or even killed.
+- `Commands`, a command button to `Interrupt` or `Kill` each session.
 
 ![Connections](images/studio-server-management-connections.png)
 
 ## Metrics
-This panel shows 
+This panel shows all the metric in 4 different tabs:
+- `Chronos`,
 
-![Metrics](images/studio-server-management-metrics.png)
+![Metrics-Chronos](images/studio-server-management-metrics-chronos.png)
+
+- `Counters`, 
+
+![Metrics-Counters](images/studio-server-management-metrics-counters.png)
+
+- `Stats`,
+
+![Metrics-Stats](images/studio-server-management-metrics-stats.png)
+
+- `Hook Values`,
+
+![Metrics-Hook](images/studio-server-management-metrics-hook.png)
 
 ## Databases
 This panel shows 
