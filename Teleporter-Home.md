@@ -29,7 +29,7 @@ Teleporter is a tool written in Java, but can be used as a tool thanks to the te
 #### Arguments
 - **-jdriver** is the driver name of the DBMS from which you want to execute the import (it's not case sensitive)
 - **-jurl** is the JDBC URL giving the location of the source database to import
-- **-ourl** is the URL for the destination Orient graph database
+- **-ourl** is the URL for the destination OrientDB graph database
 - **-juser (optional)** is the username to access the source database
 - **-jpasswd (optional)** is the password to access the source database
 - **-s (optional)** is the strategy adopted during the importing phase. If not specified naive-aggregate strategy is adopted. Possible values: 
