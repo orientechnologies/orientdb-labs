@@ -64,7 +64,7 @@ This panel shows all the metric in 4 different tabs. To know more about metrics 
 ![Metrics-Hook](images/studio-server-management-metrics-hook.png)
 
 ## Databases
-Lists all databases created and present on the server. It is possible make a backup using the specific option.
+Lists all databases created on the server. It is possible make a backup using the specific option.
 
 ![Databases](images/studio-server-management-databases.png)
 
