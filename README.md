@@ -33,8 +33,8 @@
 - [Training](http://orientdb.com/training) - Training and classes.
 - [Events](http://orientdb.com/event) - Follow OrientDB at the next event!
 - [Team](Team.md) - Meet the team behind OrientDB
-- [Contribute](Contribute-to-OrientDB.md) - Contribute to the project.
-- [Who is using OrientDB?](http://orientdb.com/customers) - Clients using OrientDB in production.
+- [Contribute](https://github.com/orientechnologies/orientdb-docs/blob/master/Contribute-to-OrientDB.md) - Contribute to the project.
+- [Who is using OrientDB?](https://github.com/orientechnologies/orientdb-docs/blob/master/Team.md) - Clients using OrientDB in production.
 
 
 ## Questions or Need Help?
