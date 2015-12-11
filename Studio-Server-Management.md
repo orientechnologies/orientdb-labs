@@ -39,23 +39,15 @@ Displays all the active connections to the server. For each connection reports t
 
 ## Metrics
 This panel shows all the metric in 4 different tabs. To know more about metrics you can view the [Profiler](https://github.com/orientechnologies/orientdb-docs/blob/master/Profiler.md) page on the [OrientDB Manual](http://orientdb.com/docs/last/index.html).
-- `Chronos`,
+- `Chronos`
 
 ![Metrics-Chronos](images/studio-server-management-metrics-chronos.png)
 
-- `Counters`, 
+- `Counters` 
 
 ![Metrics-Counters](images/studio-server-management-metrics-counters.png)
 
-- `Stats`,
-  - `Name`, as
-  - `Entries`, as
-  - `Average`, as
-  - `Total`, as
-  - `Max`, as
-  - `Min`, as
-  - `Last`, as
-  - `Last Execution`, as
+- `Stats`
 
 ![Metrics-Stats](images/studio-server-management-metrics-stats.png)
 
