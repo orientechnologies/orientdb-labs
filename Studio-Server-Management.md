@@ -15,7 +15,7 @@ This panel summarizes all the most important information about the current clust
 ![Overview](images/studio-server-management-overview.png)
 
 ## Connections
-Displays all the active connections to the server. Each connection reports the following information:
+Displays all the active connections to the server. For each connection reports the following information:
 - `Session ID`, as the unique session number
 - `Client`, as the unique client number
 - `Address`, is the connection source
