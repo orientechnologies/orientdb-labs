@@ -14,7 +14,7 @@ The required parameters for the minimal import configuration are:
 
 You can even access to the advanced import options explained in the [Teleporter Documentation](Teleporter-Home.md).
 
-![Teleporter Adavced Options](images/studio-teleporter-advancedoptions.png)
+![Teleporter Adavced Options](images/studio-teleporter-advancedoptions.png =200x200)
 
 You can run your configured job through the `RUN` button, thus the job progress monitor will be displayed:
 
