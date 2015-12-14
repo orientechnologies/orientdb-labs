@@ -20,7 +20,7 @@ Thus all records of each table are imported according to this "schemas-mapping":
 ####Example 1 - Without Join Table
 Source DB schema translation in OrientDB schema:      
 
---![](images/teleporter-naive-strategy-schema1.png)   
+![](images/teleporter-naive-strategy-schema1.png)   
 
 Correspondent records import:      
 
