@@ -62,9 +62,9 @@ It lists all databases created on the server. It is possible make a backup using
 
 ## Warnings
 It list all warning messages. For each you can see:
-- `Warning`, the warning message
-- `Count`, the number of that warnings
-- `Last Time`, the timestamp of the last warning message
+- `Warning`, as the warning message
+- `Count`, as the number of that warnings
+- `Last Time`, as the timestamp of the last warning message
 
 ![Warnings](images/studio-server-management-warnings.png)
 
