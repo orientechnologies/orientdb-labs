@@ -15,7 +15,7 @@
 - [Pattern Matching](SQL-Match.md)
   - [Pattern Matching Proposal](Pattern-Matching-Proposal.md)
 - [Spatial Module](Spatial-Module.md)
-- [Incremental Backup](Incremental-Backup-And-Restore.md)
+- [Incremental Backup and Restore](Incremental-Backup-And-Restore.md)
 - [Teleporter](Teleporter-Home.md) migration tool
   - [Installation and configuration](Teleporter-Installation-and-Configuration.md)
   - [Execution strategies](Teleporter-Execution-Strategies.md)
