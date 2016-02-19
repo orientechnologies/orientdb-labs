@@ -5,9 +5,9 @@
 Incremental backup generates smaller backup files with only the delta between 2 versions of databases. This is useful when you execute a backup at regular basis and you want to avoid to backup the entire database everytime.
 
 ## See also
-- [Backup and Restore](Backup-and-Restore.md)
-- [BACKUP DATABASE console command](Console-Command-Backup.md)
-- [RESTORE DATABASE console command](Console-Command-Restore.md)
+- [Backup and Restore](https://github.com/orientechnologies/orientdb-docs/blob/master/Backup-and-Restore.md)
+- [BACKUP DATABASE console command](https://github.com/orientechnologies/orientdb-docs/blob/master/Console-Command-Backup.md)
+- [RESTORE DATABASE console command](https://github.com/orientechnologies/orientdb-docs/blob/master/Console-Command-Restore.md)
 
 ## How does it work?
 
@@ -27,7 +27,7 @@ The most important information is the `lsn` field that is the WAL LSN (Last Seri
 
 ### Incremental backup via console
 
-[Backup Database console command](Console-Command-Backup.md) accepts `-incremental` as optional parameter to execute an incremental backup. In this case the new backup is executed from last backup executed (File `last-backup.json` is read if any). If this is the first incremental backup, a full backup is executed. Example:
+[Backup Database console command](https://github.com/orientechnologies/orientdb-docs/blob/master/Console-Command-Backup.md) accepts `-incremental` as optional parameter to execute an incremental backup. In this case the new backup is executed from last backup executed (File `last-backup.json` is read if any). If this is the first incremental backup, a full backup is executed. Example:
 
 ```
 orientdb> connect plocal:/databases/mydb admin admin
@@ -48,7 +48,7 @@ orientdb {db=Whisky}> backup database /tmp/backup -incremental=93222
 
 ### Incremental restore via console
 
-[Restore Database console command](Console-Command-Restore.md) automatically recognizes if a backup contains incremental data. Example:
+[Restore Database console command](https://github.com/orientechnologies/orientdb-docs/blob/master/Console-Command-Restore.md) automatically recognizes if a backup contains incremental data. Example:
 
 ```
 orientdb> connect plocal:/databases/mydb admin admin
@@ -60,7 +60,7 @@ orientdb {db=Whisky}> restore database /tmp/backup
 
 ## Distributed Architecture
 
-Incremental backup is used in [Distributed Architecture](Distributed-Architecture.md) when a server node restarts. This avoid to backup and tranfer the entire database across the network.
+Incremental backup is used in [Distributed Architecture](https://github.com/orientechnologies/orientdb-docs/blob/master/Distributed-Architecture.md) when a server node restarts. This avoid to backup and tranfer the entire database across the network.
 
 ## Internals
 

@@ -1,7 +1,7 @@
 <!-- proofread 2015-12-10 SAM -->
 # Spatial Module
 
-(Versions 2.2 and after only)Replacement for [Spatial-Index](Spatial-Index.md)
+(Versions 2.2 and after only)Replacement for [Spatial-Index](https://github.com/orientechnologies/orientdb-docs/blob/master/Spatial-Index.md)
 
 OrientDB offers a brand new module to handle geospatial information provided as external plugin.  
 
