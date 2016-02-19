@@ -12,6 +12,10 @@
   - [Query Profiler](Studio-Query-Profiler.md) (Enterprise Edition)
   - [Studio Auditing](Studio-Auditing.md) (Enterprise Edition)
   - [Teleporter](Studio-Teleporter.md) (Enterprise Edition)
+- [Pattern Matching](SQL-Match.md)
+  - [Pattern Matching Proposal](Pattern-Matching-Proposal.md)
+- [Spatial Module](Spatial-Module.md)
+- [Incremental Backup](Incremental-Backup-And-Restore.md)
 - [Teleporter](Teleporter-Home.md) migration tool
   - [Installation and configuration](Teleporter-Installation-and-Configuration.md)
   - [Execution strategies](Teleporter-Execution-Strategies.md)
