@@ -1,7 +1,7 @@
 # Teleporter
 **OrientDB Teleporter** is a tool that synchronizes a RDBMS to OrientDB database. You can use Teleporter to:
 - Import your existing RDBMS to OrientDB
-- Keep your OrientDB database synchronized with changes from the RDBMS. In this case the database on RDBMS remains the primary and the database on OrientDB a synchronized copy. [Synchronization](Teleporter-Sequential-Executions-and-One-Way-Synchronizer.md) is one way one, so all the changes in OrientDB database will not be propagated to the RDBMS
+- Keep your OrientDB database synchronized with changes from the RDBMS. In this case the database on RDBMS remains the primary and the database on OrientDB a synchronized copy. [Synchronization](Teleporter-Sequential-Executions-and-One-Way-Synchronizer.md) is one way, so all the changes in OrientDB database will not be propagated to the RDBMS
 
 Teleporter is fully compatible with several RDBMS that have a JDBC driver: we successfully tested Teleporter with Oracle, SQLServer, MySQL, PostgreSQL and HyperSQL. Teleporter manages all the necessary type conversions between the different DBMSs and imports all your data as Graph in OrientDB.
 
