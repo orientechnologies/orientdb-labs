@@ -3,7 +3,7 @@
 ## Quick Navigation
 
 ### Index of contents
-- [What is Teleporter](Teleporter-Home.md)
+- [What is Teleporter - Quick start](Teleporter-Home.md)
 - [Installation and configuration](Teleporter-Installation-and-Configuration.md)
 - [Execution strategies](Teleporter-Execution-Strategies.md)
 - [Sequential executions and One-Way Synchronizer](Teleporter-Sequential-Executions-and-One-Way-Synchronizer.md)
