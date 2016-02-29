@@ -4,10 +4,10 @@
 Teleporter is really easy to install, you just have to download the installation package available [here](http://orientdb.com/teleporter/) and follow these few instructions:
 
 1. Download the package
-2. Extract the orientdb-oteleporter-1.0.1.jar in the $ORIENTDB_HOME/plugins folder
-3. Extract the script (oteleporter.sh or oteleporter.bat) in the $ORIENTDB_HOME/bin folder
+2. Move orientdb-teleporter-1.0.1-SNAPSHOT.jar contained in plugin/ folder to the $ORIENTDB_HOME/plugins folder.
+3. Move the scripts oteleporter.sh and oteleporter.bat (for Windows users) contained in script/ folder to the $ORIENTDB_HOME/bin folder.
 
-Teleporter is ready to run, you have just to run the tool through the script as described in the [Home page.](Teleporter-Home.md)
+Teleporter is ready, you just have to run the tool through the script as described in the [Home page.](Teleporter-Home.md)
 
 ## Driver Configuration
 
