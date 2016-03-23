@@ -1,7 +1,7 @@
 # New Security Features - OrientDB
 
 ## Overview
-The new security features in OrientDB (introduced in release 2.2) provide an extensible framework for adding external authenticators, password validation, LDAP import of database roles and users, and advanced auditing capabilities.
+The new security features in OrientDB (introduced in release 2.2) provide an extensible framework for adding external authenticators, password validation, LDAP import of database roles and users, advanced auditing capabilities, and syslog support.
 
 The new security system uses a JSON configuration file, located in the *config* directory.  The default name of the file is *security.json*, but it can be overridden by setting the "server.security.file" property in *orientdb-server-config.xml* or by setting the global server property, "server.security.file".
 
@@ -18,7 +18,7 @@ All *authenticators* can be configured in the "authentication" section of the [s
 Currently, OrientDB provides a [Kerberos authenticator](#kerb-auth), a [password authenticator](#pw-auth) for authenticating users in the *security.json* file, and a [server config authenticator](#sc-auth) for authenticating users in the *orientdb-server-config.xml* file.  Additional *authenticators* may be provided in the future, and it's very easy to build new ones.
 
 #### <a id="kerb-auth"></a>OKerberosAuthenticator
-This *authenticator* (Enterprise-only) provides support for Kerberos authentication and full browser SPNEGO support.  See the [security configuration](Security-Config.md) page for full details on configuring this *authenticator* for Kerberos.
+This *authenticator* provides support for Kerberos authentication and full browser SPNEGO support.  See the [security configuration](Security-Config.md) page for full details on configuring this *authenticator* for Kerberos.
 
 Also, see [Kerberos client examples](Security-Kerberos-Client-Examples.md) to see how to use the OrientDB clients with Kerberos.
 
@@ -43,13 +43,13 @@ See the [security configuration](Security-Config.md) page for details on how to 
 
 
 ## LDAP Import ##
-Another often-requested feature, importing of LDAP users, is now available as part of the Enterprise Edition of OrientDB.  Each database can be configured to import from multiple LDAP domains, each domain may specify multiple LDAP servers, and the users and their corresponding roles can be specified per-domain using a standard LDAP filter.
+Another often-requested feature, importing of LDAP users, is now available as part of OrientDB.  Each database can be configured to import from multiple LDAP domains, each domain may specify multiple LDAP servers, and the users and their corresponding roles can be specified per-domain using a standard LDAP filter.
 
 The [security configuration](Security-Config.md) page explains in great details all the options for the default LDAP importer.
 
 
 ## Auditing/Syslog ##
-Enhancements to the Enterprise auditing component have also been made.  The audit log now supports monitoring of a class being created and dropped as well as when distributed nodes join and leave the cluster.  Additionally, for operating systems that support *syslog*, a new *syslog* component, `ODefaultSyslog`, has been added for recording auditing events.  
+Enhancements to the auditing component have also been made.  The audit log now supports monitoring of a class being created and dropped as well as when distributed nodes join and leave the cluster.  Additionally, for operating systems that support *syslog*, a new *syslog* component, `ODefaultSyslog`, has been added for recording auditing events.  
 
 See the [security configuration](Security-Config.md) page for details on auditing properties.
 

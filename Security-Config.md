@@ -1,7 +1,7 @@
 # OrientDB Security Configuration #
 The new OrientDB security system uses a JSON configuration file that's located by default in the *config* directory.  The default name of the file is *security.json*, but it can be overridden by setting the "server.security.file" property in *orientdb-server-config.xml* or by setting the global server property, "server.security.file".
 
-The security.json configuration file may contain up to seven global properties: "enabled", "debug", "server", "authentication", "passwordValidator", "ldapImporter", and "auditing".
+The security.json configuration file may contain up to eight global properties: "enabled", "debug", "server", "authentication", "passwordValidator", "ldapImporter", "auditing", and "syslog".
 
 Here's a description of each top-level property in the security.json file.
 
@@ -13,7 +13,8 @@ Here's a description of each top-level property in the security.json file.
 |"authentication"|This property is an object with two sub-properties, "allowDefault" and "authenticators", and it is described in greater detail below.  Its purpose defines the available security authenticators.|
 |"passwordValidator"|This property is also an object and defines the parameters required for the security system's password validator when enabled.  It is described in detail below.|
 |"ldapImporter"|This property is an object with up to five sub-properties, and it defines the LDAP importer object.  See below for more details.|
-|"auditing"|This property is also an object and contains two sub-properties, "enabled" and "syslog", and is described below.| 
+|"auditing"|This property is also an object and contains two sub-properties, "class" and "enabled", and is described below.|
+|"syslog"|This property is an object and contains five sub-properties.  It is described below.| 
 
 ## "server"
 The "server" object contains one property called "createDefaultUsers".
@@ -35,7 +36,7 @@ The "authentication" object specifies security authenticators for OrientDB and t
 	[
 		{
 			"name"		: "Kerberos",
-			"class"		: "com.orientechnologies.agent.kerberos.OKerberosAuthenticator",
+			"class"		: "com.orientechnologies.security.kerberos.OKerberosAuthenticator",
 			"enabled"	: true,
 			"debug"		: false,
 	
@@ -63,7 +64,7 @@ The "authentication" object specifies security authenticators for OrientDB and t
 		
 		{
 			"name"				: "Password",
-			"class"				: "com.orientechnologies.orient.server.security.ODefaultPasswordAuthenticator",
+			"class"				: "com.orientechnologies.security.authenticator.ODefaultPasswordAuthenticator",
 			"enabled"			: true,
 			"users" 			:
 			[
@@ -73,7 +74,7 @@ The "authentication" object specifies security authenticators for OrientDB and t
 
 		{
 			"name"				: "ServerConfig",
-			"class"				: "com.orientechnologies.orient.server.security.OServerConfigAuthenticator",
+			"class"				: "com.orientechnologies.security.authenticator.OServerConfigAuthenticator",
 			"enabled"			: true
 		}
 	]
@@ -98,14 +99,13 @@ Each authenticator object supports at least three properties: "name", "class", a
 	
 Each user object can be used for authorization of the specified resources as well as authentication, if a password is present.
 	
-The full classpath for the "class" property is "com.orientechnologies.orient.server.security.ODefaultPasswordAuthenticator".
+The full classpath for the "class" property is "com.orientechnologies.security.authenticator.ODefaultPasswordAuthenticator".
 	
 Here's an example of the "users" property:
 
 		"users" 				:
 		[
-			{ "username" : "kerberosuser/kerberos.domain.com@REALM.COM", "resources" : "*" },
-			{ "username" : "kerberosuser@REALM.COM", "resources" : "*" }
+			{ "username" : "someuser", "resources" : "*" }
 		]
 
 The "resources" property uses the same format as the "resources" property for each `<user>` in the `<users>` section of the orientdb-server-config.xml file.
@@ -113,13 +113,13 @@ The "resources" property uses the same format as the "resources" property for ea
 ### OServerConfigAuthenticator
 *OServerConfigAuthenticator* utilizes the <users> element in the orientdb-server-config.xml file and permits its list of server users to be used for authentication and authorization of resources.  Beyond "name", "class", and "enabled", *OServerConfigAuthenticator* requires no additional properties.
 	
-The full classpath for the "class" property is "com.orientechnologies.orient.server.security.OServerConfigAuthenticator".
+The full classpath for the "class" property is "com.orientechnologies.security.authenticator.OServerConfigAuthenticator".
 
 
 ### OKerberosAuthenticator
-*OKerberosAuthenticator* is an Enterprise-only authenticator and provides support for Kerberos/SPNEGO authentication.  In addition to the usual "name", "class", and "enabled" properties, the *OKerberosAuthenticator* component also supports "debug", "krb5_config", "service", "spnego", and "client" properties.  All of these properties are defined in greater detail below.
+*OKerberosAuthenticator* provides support for Kerberos/SPNEGO authentication.  In addition to the usual "name", "class", and "enabled" properties, the *OKerberosAuthenticator* component also supports "debug", "krb5_config", "service", "spnego", and "client" properties.  All of these properties are defined in greater detail below.
 	
-The full classpath for the "class" property is "com.orientechnologies.agent.kerberos.OKerberosAuthenticator".
+The full classpath for the "class" property is "com.orientechnologies.security.kerberos.OKerberosAuthenticator".
 
 #### "debug"
 When set to true, all of the Kerberos and SPNEGO authentication are displayed in the server's logfile.  This can be very useful when debugging authentication problems.
@@ -159,9 +159,9 @@ The "client" property is used by OrientDB for configuring the LDAP/AD importer u
 ## "passwordValidator"
 The "passwordValidator" object specifies an optional password validator that the OrientDB security system uses when applying new passwords.  The supported properties of the password validator object depend on the type of object specified but always contain at least "class" and "enabled".  The "class" property defines which password validator component is instantiated.  The "enabled" property (defaults to true) specifies whether the password validator component is active or not.
 
-The Enterprise version of OrientDB ships with an *ODefaultPasswordValidator* component.  Its properties are defined below, and each is only required if it's included in the "passwordValidator" property.
+OrientDB ships with an *ODefaultPasswordValidator* component.  Its properties are defined below, and each is only required if it's included in the "passwordValidator" property.
 
-The full classpath for the "class" property is "com.orientechnologies.agent.security.ODefaultPasswordValidator".
+The full classpath for the "class" property is "com.orientechnologies.security.password.ODefaultPasswordValidator".
 
 ### ODefaultPasswordValidator
 
@@ -176,7 +176,7 @@ Here is an example of the *ODefaultPasswordValidator*'s configuration in the sec
 	
 	"passwordValidator" :
 	{
-		"class"				: "com.orientechnologies.agent.security.ODefaultPasswordValidator",
+		"class"				: "com.orientechnologies.security.password.ODefaultPasswordValidator",
 		"minimumLength"		: 5,
 		"numberRegEx"		: "(?:[0-9].*){2}",
 		"uppercaseRegEx"	: "(?:[A-Z].*){3}",
@@ -187,7 +187,7 @@ Here is an example of the *ODefaultPasswordValidator*'s configuration in the sec
 ## "ldapImporter"
 The "ldapImporter" object defines the properties for the LDAP importer security component.  As with the other security components, the LDAP importer object always has a "class" property and optional "enabled" and "debug" properties.  The "class" property defines which LDAP importer component is instantiated.  The "enabled" property (defaults to true) specifies whether the LDAP importer component is active or not.
 
-The Enterprise version of OrientDB provides an OLDAPImporter component.  Its properties are defined below.  The full classpath for the "class" property is "com.orientechnologies.agent.ldap.OLDAPImporter".
+OrientDB provides a default OLDAPImporter component, and its properties are defined below.  The full classpath for the "class" property is "com.orientechnologies.security.ldap.OLDAPImporter".
 
 ### OLDAPImporter
 |Property|Description|
@@ -219,7 +219,7 @@ LDAP users are imported based on a starting location within the directory and fi
 
 |Property|Description|
 |--------|-----------|
-|"baseDN"|The "basedDN" property specifies the distinguished name of the starting point for the LDAP import, e.g., "CN=OrientDBBase,CN=Users,DC=ad,DC=domain,DC=com".|
+|"baseDN"|The "basedDN" property specifies the distinguished name of the starting point for the LDAP import, e.g., "CN=Users,DC=ad,DC=domain,DC=com".|
 |"filter"|This property specifies the LDAP filter to use for importing users.  Here's a simple example: "(&(objectCategory=person)(objectclass=user)(memberOf=CN=ODBUser,CN=Users,DC=ad,DC=domain,DC=com))".|
 |"roles"|This is an array of strings, specifying the corresponding OrientDB roles that will be assigned to each user that is imported from the current group.|
 
@@ -231,7 +231,7 @@ Here's an example of the "ldapImporter" property:
 ```	
 "ldapImporter" :
 {
-	"class"		: "com.orientechnologies.agent.ldap.OLDAPImporter",
+	"class"		: "com.orientechnologies.security.ldap.OLDAPImporter",
 	"enabled"	: true,
 	"debug"		: false,
 	"period"	: 60,
@@ -257,12 +257,12 @@ Here's an example of the "ldapImporter" property:
 					"users" :
 					[
 						{
-							"baseDN"	: "CN=OrientDBBase,CN=Users,DC=ad,DC=domain,DC=com",
+							"baseDN"	: "CN=Users,DC=ad,DC=domain,DC=com",
 							"filter"	: "(&(objectCategory=person)(objectclass=user)(memberOf=CN=ODBUser,CN=Users,DC=ad,DC=domain,DC=com))",
 							"roles"		: ["reader", "writer"]
 						},
 						{
-							"baseDN"	: "CN=OrientDBBase,CN=Users,DC=ad,DC=domain,DC=com",
+							"baseDN"	: "CN=Users,DC=ad,DC=domain,DC=com",
 							"filter"	: "(&(objectCategory=person)(objectclass=user)(memberOf=CN=ODBAdminGroup,CN=Users,DC=ad,DC=domain,DC=com))",
 							"roles"		: ["admin"]
 						}
@@ -288,31 +288,27 @@ The class has four properties defined: *Domain*, *BaseDN*, *Filter*, and *Roles*
 
 
 ## "auditing"
-The *auditing* component of the new security system is configured with the "auditing" object.  It has two properties, the usual "enabled" property and a "syslog" object property.  Note that the *auditing* component is an Enterprise-only feature.
+The *auditing* component of the new security system is configured with the "auditing" object.  It has two properties, the usual "class" and "enabled" properties.
 
-### "syslog"
-The "syslog" object can be configured with these properties.
+## "syslog"
+The "syslog" component can be configured with these properties.
 
 |Property|Description|
 |--------|-----------|
-|"class"|The "class" property defines which component is instantiated for the *syslog* object.  The class for the Enterprise *syslog* component is "com.orientechnologies.agent.security.ODefaultSyslog".|
+|"class"|The "class" property defines which component is instantiated for the *syslog* object.  The class for the Enterprise *syslog* component is "com.orientechnologies.security.syslog.ODefaultSyslog".|
 |"enabled"|When set to true, the *syslog* component is used in conjunction with the regular OrientDB auditing log.|
 |"hostname"|This property specifies the name or address of the *syslog* daemon.|
 |"port"|The "port" property specifies which UDP port to use when communicating with the *syslog* daemon.  The default *syslog* port of 514 is used if "port" is not specified.|
 |"appName"|This property indicates what *application name* is displayed in the *syslog* output.  By default, it's set to "OrientDB".| 
 
-Here's an example of the "auditing" configuration:
+Here's an example of the "syslog" configuration:
 ```
-"auditing" :
+"syslog" :
 {
-	"enabled"		: true,
-	"syslog"		:
-	{
-		"class"		: "com.orientechnologies.agent.security.ODefaultSyslog",
-		"enabled"	: true,
-		"hostname"	: "localhost",
-		"port"		: 514,
-		"appName"	: "OrientDB"
-	}
+	"class"		: "com.orientechnologies.security.syslog.ODefaultSyslog",
+	"enabled"	: true,
+	"hostname"	: "localhost",
+	"port"		: 514,
+	"appName"	: "OrientDB"
 }
 ```
