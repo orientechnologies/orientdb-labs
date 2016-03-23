@@ -90,7 +90,7 @@ Each authenticator object supports at least three properties: "name", "class", a
 |Property|Description|
 |--------|-----------|
 |"name"|The "name" property must be unique among the authenticators and can be used by other security components to reference which authenticator is used to authenticate a service.  As an example, the OLDAPImporter component may specify an "authenticator" to use and it must correspond to the "name" property.|
-|"class"|The "class" property defines which authenticator component is instantiated for the security authenticator.  The Community Edition of OrientDB comes with two default authenticators: ODefaultPasswordAuthenticator and OServerConfigAuthenticator.  The Enterprise version of OrientDB contains an OKerberosAuthenticator component that supports Kerberos authentication.  All are described below.|
+|"class"|The "class" property defines which authenticator component is instantiated for the security authenticator.  The available authenticators are: ODefaultPasswordAuthenticator, OKerberosAuthenticator, and OServerConfigAuthenticator.  All are described below.|
 |"enabled"|When set to true, the authenticator is used as part of the chain of authenticators.  If set to false, the authenticator is ignored.|
 
 
@@ -295,7 +295,7 @@ The "syslog" component can be configured with these properties.
 
 |Property|Description|
 |--------|-----------|
-|"class"|The "class" property defines which component is instantiated for the *syslog* object.  The class for the Enterprise *syslog* component is "com.orientechnologies.security.syslog.ODefaultSyslog".|
+|"class"|The "class" property defines which component is instantiated for the *syslog* object.  The default class for the *syslog* component is "com.orientechnologies.security.syslog.ODefaultSyslog".|
 |"enabled"|When set to true, the *syslog* component is used in conjunction with the regular OrientDB auditing log.|
 |"hostname"|This property specifies the name or address of the *syslog* daemon.|
 |"port"|The "port" property specifies which UDP port to use when communicating with the *syslog* daemon.  The default *syslog* port of 514 is used if "port" is not specified.|
