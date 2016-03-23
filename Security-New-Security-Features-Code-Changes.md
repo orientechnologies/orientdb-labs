@@ -388,31 +388,51 @@ Replaced OServerSSLSocketFactory with OServerTLSSocketFactory.
 
 
 ### security.json ###
-Added a default security.json implemntation file.
+Added a default security.json implementation file.
+
+## Security Plugin
+To support a single location for all the new security component implementations, a new project, *orientdb-security*, has been created.
+
+The following security components now reside here:
+- ODefaultAuditing
+- ODefaultPasswordAuthenticator
+- ODefaultPasswordValidator
+- ODefaultSyslog
+- OKerberosAuthenticator
+- OLDAPImporter
+- OServerConfigAuthenticator
+
 
 
 ## Enterprise Agent ##
 
-
 ### OAuditingHook ###
+[This was moved into *orientdb-security*.]
+
 Added support for auditing of CREATECLASS and DROPCLASS events.
 
 Added optional support for *syslog* audit logging as well.
 
 
 ### OAuditingListener ###
+[This was moved into *orientdb-security* and renamed `ODefaultAuditing`.]
+
 Implemented two new interfaces, `OAuditingService` and `ODistributedLifecycleListener`.
 
 Also moved `Orient.instance().addDbLifecycleListener(this)` to the `active()` method.
 
 
 ### OEnterpriseAgent ###
+[This was removed from the agent and added to `OSecurityPlugin` in *orientdb-security*.]
+
 Added a new method, `registerSecurityComponents()`, for registering Enterprise-only security components in the security system.
 
 Added a call to `registerSecurityComponents()` in the `startup()` method.
 
 
 ### agent/kerberos ###
+[This was moved into *orientdb-security*.]
+
 Added a new *kerberos* directory and the following new files.
 
 |File|Description|
@@ -423,6 +443,8 @@ Added a new *kerberos* directory and the following new files.
 
 
 ### agent/ldap ###
+[This was moved into *orientdb-security*.]
+
 Added a new *ldap* directory and the following new files.
 
 |File|Description|
@@ -433,6 +455,8 @@ Added a new *ldap* directory and the following new files.
 
 
 ### agent/security ###
+[This was moved into *orientdb-security*.]
+
 Added a new *security* directory and the following new files.
 
 |File|Description|
@@ -442,10 +466,14 @@ Added a new *security* directory and the following new files.
 
 
 ### resources ###
+[This was moved into *orientdb-security*.]
+
 Modified the default-auditing-config.json file, adding class support for "onCreateClassEnabled", "onCreateClassMessage", "onDropClassEnabled", and "onDropClassMessage". 
 
 
 ### pom.xml ###
+[This was moved into *orientdb-security*.]
+
 Added the dependency for CloudBees *syslog* client support:
 
 ```
