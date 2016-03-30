@@ -58,19 +58,30 @@ The new security system supports dynamic reloading by an HTTP POST request.  The
 
 Here's an example using *curl* with basic authentication:
 ```
-curl -u root:password -H "Content-Type: application/json" -X POST -d '{ "config" : "${ORIENTDB_HOME}/config/security.json" }'  servername:2480/security/reload 
+curl -u root:password -H "Content-Type: application/json" -X POST -d '{ "configFile" : "${ORIENTDB_HOME}/config/security.json" }'  servername:2480/security/reload 
 ```
 
 Here's another example using *curl* using Kerberos/SPNEGO authentication:
 ```
-curl --negotiate -u : -H "Content-Type: application/json" -X POST -d '{ "config" : "${ORIENTDB_HOME}/config/security.json" }'  servername:2480/security/reload 
+curl --negotiate -u : -H "Content-Type: application/json" -X POST -d '{ "configFile" : "${ORIENTDB_HOME}/config/security.json" }'  servername:2480/security/reload 
 ```
 	
-Notice the passed-in JSON "config" property.  Any valid security configuration file may be specified here, making testing multiple configurations possible.
+Notice the passed-in JSON "configFile" property.  Any valid security configuration file may be specified here, making testing multiple configurations possible.
 
+### Reloading Individual Components ###
+Instead of reloading the entire security system, it's also possible to reload individual security components.
 
+Here's an example using *curl* with basic authentication:
+```
+curl -u root:password -H "Content-Type: application/json" -X POST -d '{ "module" : "auditing", "config" : "{ACTUAL JSON CONTENT}" }'  servername:2480/security/reload 
+```
 
+Notice, instead of specifying "configFile" you use "config" and the "module" property.
 
-
-
-
+Currently, you can reload the following security components:
+- server
+- authentication
+- passwordValidator
+- ldapImporter
+- auditing
+- syslog
