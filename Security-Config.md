@@ -64,7 +64,7 @@ The "authentication" object specifies security authenticators for OrientDB and t
 		
 		{
 			"name"				: "Password",
-			"class"				: "com.orientechnologies.security.authenticator.ODefaultPasswordAuthenticator",
+			"class"				: "com.orientechnologies.orient.server.security.authenticator.ODefaultPasswordAuthenticator",
 			"enabled"			: true,
 			"users" 			:
 			[
@@ -74,7 +74,7 @@ The "authentication" object specifies security authenticators for OrientDB and t
 
 		{
 			"name"				: "ServerConfig",
-			"class"				: "com.orientechnologies.security.authenticator.OServerConfigAuthenticator",
+			"class"				: "com.orientechnologies.orient.server.security.authenticator.OServerConfigAuthenticator",
 			"enabled"			: true
 		}
 	]
@@ -99,7 +99,7 @@ Each authenticator object supports at least three properties: "name", "class", a
 	
 Each user object can be used for authorization of the specified resources as well as authentication, if a password is present.
 	
-The full classpath for the "class" property is "com.orientechnologies.security.authenticator.ODefaultPasswordAuthenticator".
+The full classpath for the "class" property is "com.orientechnologies.orient.server.security.authenticator.ODefaultPasswordAuthenticator".
 	
 Here's an example of the "users" property:
 
@@ -113,7 +113,7 @@ The "resources" property uses the same format as the "resources" property for ea
 ### OServerConfigAuthenticator
 *OServerConfigAuthenticator* utilizes the <users> element in the orientdb-server-config.xml file and permits its list of server users to be used for authentication and authorization of resources.  Beyond "name", "class", and "enabled", *OServerConfigAuthenticator* requires no additional properties.
 	
-The full classpath for the "class" property is "com.orientechnologies.security.authenticator.OServerConfigAuthenticator".
+The full classpath for the "class" property is "com.orientechnologies.orient.server.security.authenticator.OServerConfigAuthenticator".
 
 
 ### OKerberosAuthenticator
