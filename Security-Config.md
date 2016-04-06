@@ -100,7 +100,7 @@ Each authenticator object supports at least three properties: "name", "class", a
 Each user object can be used for authorization of the specified resources as well as authentication, if a password is present.
 	
 The full classpath for the "class" property is "com.orientechnologies.orient.server.security.authenticator.ODefaultPasswordAuthenticator".
-	
+
 Here's an example of the "users" property:
 
 		"users" 				:
@@ -109,12 +109,15 @@ Here's an example of the "users" property:
 		]
 
 The "resources" property uses the same format as the "resources" property for each `<user>` in the `<users>` section of the orientdb-server-config.xml file.
+
+Additionally, *ODefaultPasswordAuthenticator* supports a "caseSensitive" property.  It defaults to true.  When set to false, usernames are not case-sensitive when retrieved for password or resources look-up.
 	
 ### OServerConfigAuthenticator
 *OServerConfigAuthenticator* utilizes the <users> element in the orientdb-server-config.xml file and permits its list of server users to be used for authentication and authorization of resources.  Beyond "name", "class", and "enabled", *OServerConfigAuthenticator* requires no additional properties.
 	
 The full classpath for the "class" property is "com.orientechnologies.orient.server.security.authenticator.OServerConfigAuthenticator".
 
+*OServerConfigAuthenticator*'s "caseSensitive" property is always false, meaning that usernames are not case-sensitive when retrieved for password or resources look-up.
 
 ### OKerberosAuthenticator
 *OKerberosAuthenticator* provides support for Kerberos/SPNEGO authentication.  In addition to the usual "name", "class", and "enabled" properties, the *OKerberosAuthenticator* component also supports "debug", "krb5_config", "service", "spnego", and "client" properties.  All of these properties are defined in greater detail below.
