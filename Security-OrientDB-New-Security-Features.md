@@ -28,6 +28,9 @@ The `ODefaultPasswordAuthenticator` supports adding server users with passwords 
 #### <a id="sc-auth"></a>OServerConfigAuthenticator
 The `OServerConfigAuthenticator` is similar to `ODefaultPasswordAuthenticator` in that it supports server users with passwords and resources, but it's designed to be used with the users in the *orientdb-server-config.xml* configuration file instead.
 
+#### <a id="su-auth"></a>OSystemUserAuthenticator
+The `OSystemUserAuthenticator` supports the new *system user* type that's stored in the system database.
+
 
 ### Chaining *Authenticators*
 What's important to note is that the *authenticators* can be thought of as being chained together so that if the first *authenticator* in the list fails to authenticate a user, then the next *authenticator* in the chain is tried.  This continues until either a user is successfully authenticated or all *authenticators* are tried.  This "chaining of *authenticators*" is used for authentication, authorization, retrieving HTTP authentication headers, and several other security features.

@@ -76,8 +76,13 @@ The "authentication" object specifies security authenticators for OrientDB and t
 			"name"				: "ServerConfig",
 			"class"				: "com.orientechnologies.orient.server.security.authenticator.OServerConfigAuthenticator",
 			"enabled"			: true
-		}
-	]
+		},
+
+		{
+			"name"				: "SystemAuthenticator",
+			"class"				: "com.orientechnologies.orient.server.security.authenticator.OSystemUserAuthenticator",
+			"enabled"			: true
+		}	]
 }
 ```
 
@@ -90,7 +95,7 @@ Each authenticator object supports at least three properties: "name", "class", a
 |Property|Description|
 |--------|-----------|
 |"name"|The "name" property must be unique among the authenticators and can be used by other security components to reference which authenticator is used to authenticate a service.  As an example, the OLDAPImporter component may specify an "authenticator" to use and it must correspond to the "name" property.|
-|"class"|The "class" property defines which authenticator component is instantiated for the security authenticator.  The available authenticators are: ODefaultPasswordAuthenticator, OKerberosAuthenticator, and OServerConfigAuthenticator.  All are described below.|
+|"class"|The "class" property defines which authenticator component is instantiated for the security authenticator.  The available authenticators are: ODefaultPasswordAuthenticator, OKerberosAuthenticator, OServerConfigAuthenticator, and OSystemUserAuthenticator.  All are described below.|
 |"enabled"|When set to true, the authenticator is used as part of the chain of authenticators.  If set to false, the authenticator is ignored.|
 
 
@@ -118,6 +123,11 @@ Additionally, *ODefaultPasswordAuthenticator* supports a "caseSensitive" propert
 The full classpath for the "class" property is "com.orientechnologies.orient.server.security.authenticator.OServerConfigAuthenticator".
 
 *OServerConfigAuthenticator*'s "caseSensitive" property is always false, meaning that usernames are not case-sensitive when retrieved for password or resources look-up.
+
+### OSystemUserAuthenticator
+*OSystemUserAuthenticator* implements authentication and authorization support for *system users* that reside in the OrientDB system database.  Beyond "name", "class", and "enabled", *OSystemUserAuthenticator* requires no additional properties.
+
+The full classpath for the "class" property is "com.orientechnologies.orient.server.security.authenticator.OSystemUserAuthenticator".
 
 ### OKerberosAuthenticator
 *OKerberosAuthenticator* provides support for Kerberos/SPNEGO authentication.  In addition to the usual "name", "class", and "enabled" properties, the *OKerberosAuthenticator* component also supports "debug", "krb5_config", "service", "spnego", and "client" properties.  All of these properties are defined in greater detail below.
