@@ -1,34 +1,19 @@
-#OrientDB Labs - version 2.2.x
+#OrientDB Labs - Version 3.0
 
 ![image](http://www.orientdb.com/images/orientdb_logo_mid.png)
+
+OrientDB v2.2 will be released on May 18, 2016.
+
+OrientDB Labs will be updated soon with the new work in progress for the next 3.0 version.
 
 ## Quick Navigation
 
 ### Index of contents
-- [Studio](Studio-Home-page.md) web tool 
-  - [Dashboard](Studio-Dashboard.md) (Enterprise Edition)
-  - [Server Management](Studio-Server-Management.md) (Enterprise Edition)
-  - [Cluster Management](Studio-Cluster-Management.md) (Enterprise Edition)
-  - [Query Profiler](Studio-Query-Profiler.md) (Enterprise Edition)
-  - [Studio Auditing](Studio-Auditing.md) (Enterprise Edition)
-  - [Teleporter](Studio-Teleporter.md) (Enterprise Edition)
-- [Pattern Matching](SQL-Match.md)
-  - [Pattern Matching Proposal](Pattern-Matching-Proposal.md)
-- [Spatial Module](Spatial-Module.md)
 - [New Security Features](Security-OrientDB-New-Security-Features.md)
 - [Security - Database Encryption](https://github.com/orientechnologies/orientdb-docs/blob/master/Database-Encryption.md)
 - [System Database Implementation](System-Database-Internal-Notes.md)
 - [System Users Implementation](System-Users-Implementation.md)
 - [Incremental Backup and Restore](Incremental-Backup-And-Restore.md)
-- [Teleporter](Teleporter-Home.md) migration tool
-  - [Installation and configuration](Teleporter-Installation-and-Configuration.md)
-  - [Execution strategies](Teleporter-Execution-Strategies.md)
-  - [Sequential executions and One-Way Synchronizer](Teleporter-Sequential-Executions-and-One-Way-Synchronizer.md)
-  - [Import filters](Teleporter-Import-Filters.md)
-  - [Inheritance](Teleporter-Inheritance.md)
-    - [Single Table Inheritance](Teleporter-Single-Table-Inheritance.md)
-    - [Table Per Class Inheritance](Teleporter-Table-Per-Class-Inheritance.md)
-    - [Table Per Concrete Class Inheritance](Teleporter-Table-Per-Concrete-Class-Inheritance.md)
 
 ### Quick References
 - [OrientDB Manual](http://orientdb.com/docs/last/index.html)
