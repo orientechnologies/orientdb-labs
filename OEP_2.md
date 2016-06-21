@@ -75,7 +75,7 @@ The proposal is following:
 ### New interfaces and classes
 
 ```java
-interface OElement {
+interface OElement extends OIdentifiable {
   public void setProperty(String name, Object val);
   public Object getProperty(String name);
   public void delete();
@@ -107,19 +107,19 @@ interface OEdge extends OElement {
 ```
 
 ```java
-class ODocument extends OElement, OIdentifiable {
+class ODocument extends OElement {
    ...
 }
 ```
 
 ```java
-class OVertexImpl extends OVertex, OIdentifiable {
+class OVertexImpl extends OVertex {
    ...
 }
 ```
 
 ```java
-class OEdgeImpl extends OEdge, OIdentifiable {
+class OEdgeImpl extends OEdge {
    ...
 }
 ```
