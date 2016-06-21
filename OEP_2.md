@@ -123,3 +123,8 @@ class OEdgeImpl extends OEdge {
    ...
 }
 ```
+
+Open questions:
+- Should OElement extend OIdentifiable? What about result sets (see OEP_5)?
+- In case we decide to have OElement that does not extend OIdentifiable, should we still have save() and delete() methods? Do we need another interface in the middle?
+- Add asVertex() and asEdge() methods to OElement?
