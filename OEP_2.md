@@ -69,3 +69,57 @@ The proposal is following:
 - [x] Hooks
 - [ ] EE
 
+
+## Implementation proposal
+
+### New interfaces and classes
+
+```java
+interface OElement {
+  public void setProperty(String name, Object val);
+  public Object getProperty(String name);
+  public void delete();
+  public void save();
+}
+```
+
+```java
+interface OVertex extends OElement {
+  public Collection<OEdge> getEdges(Direction direction);
+  public Collection<OEdge> getEdges(Direction direction, String... type);
+  public Collection<OEdge> getEdges(Direction direction, OClass... type);
+  
+  public Collection<OVertex> getVertices(Direction direction);
+  public Collection<OVertex> getVertices(Direction direction, String... type);
+  public Collection<OVertex> getVertices(Direction direction, OClass... type);
+  
+  public OEdge addEdge(OVertex to);
+  public OEdge addEdge(OVertex to, String type);
+  public OEdge addEdge(OVertex to, OClass type);
+}
+```
+
+```java
+interface OEdge extends OElement {
+  public OVertex getFrom();
+  public OVertex getTo();
+}
+```
+
+```java
+class ODocument extends OElement, OIdentifiable {
+   ...
+}
+```
+
+```java
+class OVertexImpl extends OVertex, OIdentifiable {
+   ...
+}
+```
+
+```java
+class OEdgeImpl extends OEdge, OIdentifiable {
+   ...
+}
+```
