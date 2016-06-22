@@ -75,11 +75,19 @@ The proposal is following:
 ### New interfaces and classes
 
 ```java
-interface OElement extends OIdentifiable {
+interface OElement {
   public void setProperty(String name, Object val);
   public Object getProperty(String name);
-  public void delete();
-  public void save();
+
+  public Optional<ODocument> asDocument();
+  public Optional<OVertex> asVertex();
+  public Optional<OEdge> asEdge();
+
+  public boolean isDocument();
+  public boolean isVertex();
+  public boolean isEdge();
+
+  public Optional<OClass> getType();
 }
 ```
 
