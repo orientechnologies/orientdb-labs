@@ -29,7 +29,7 @@ It's really hard to understand what is considered public and what is not in the 
 
 Package-based separation will provide clean indication of a public API. For users, if you don't see "internal" in a package name, it's public, you may use anything from it safely. If you see "internal" in the package name, you still may use anything from it, but at your own risk. Java API documentation should be updated to mention this fact.
 
-For ODB contributors, if you see "internal" in a package name, you may change anything without a fear of breaking things. If you don't see "internal", be careful while changing something, it's a public API. Think twice before removing, changing or deprecating something, think triple before adding somehthing new, we have to support it.
+For ODB contributors, if you see "internal" in a package name, you may change anything without a fear of breaking things. If you don't see "internal", be careful while changing something, it's a public API. Think twice before removing, changing or deprecating something, think triple before adding something new, we have to support it.
 
 For each Java file in the ODB code base following steps should be taken:
 
