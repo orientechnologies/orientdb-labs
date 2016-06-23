@@ -48,7 +48,7 @@ For consistency, we must choose only one internal package naming scheme:
 
 **Alternatives:**
 
-* Leave is as it is.
+* Leave it as it is.
 * Apply API annotations/javadocs, leave packages alone.
 * Declare internal things as package-private. May introduce problems with visibility/inheritance/testability.
 
