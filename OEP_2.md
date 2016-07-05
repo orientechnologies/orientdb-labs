@@ -87,7 +87,7 @@ interface OElement {
   public boolean isVertex();
   public boolean isEdge();
 
-  public Optional<OClass> getType();
+  public Optional<OClass> getSchemaType();
 }
 ```
 
