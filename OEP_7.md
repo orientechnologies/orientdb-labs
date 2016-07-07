@@ -95,8 +95,8 @@ need one page instead of two which will also give a good speed up in record crea
 
 **Impact matrix**
 
-- [*] Storage engine
-- [*] SQL
+- [x] Storage engine
+- [x] SQL
 - [ ] Protocols
 - [ ] Indexes
 - [ ] Console
