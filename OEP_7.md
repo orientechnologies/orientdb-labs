@@ -67,6 +67,9 @@ After this change, format of rid will be following:
 inside of the page , the last 6 bytes will be reserved for an index of a page inside of the cluster.
 3. Delversion will contain 8 bytes.
 
+If we will create let's say 3 records inside of cluster with id=10 using first  page as container of those records, their rids will look like following: ```[#10:65537:0, #10:65538:0, #10:65539]``` , so as I can see adjacent clusters are palced on the same page.
+
+
 This format of cluster gives following advantages:
 
 1. If we fetch record by rid we for most of the cases will fetch it by loading an only single page from the disk cache.
