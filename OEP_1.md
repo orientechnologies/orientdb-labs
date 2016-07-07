@@ -44,7 +44,7 @@ The proposal is following:
 - Use the current project issue tracker and source master branch for OEP
 - Create an .md file in the master branch with the description of the OEP. The file name has to be `OEP_<N>.md`, eg. `OEP_15.md`. The .md file has to be updated every time there is a decision about a change in the OEP proposal. It also have to include an impact matrix describing how this OEP impacts single components of OrientDB.
 - Create an issue for each OEP, that will be used to discuss 
-- Only the core team (committers) should create and OEP, but all the users/community members should participate to the discussion
+- Only the core team (committers) should create an OEP, but all the users/community members should participate to the discussion
 - Use issue numbers for OEPs, eg the issue n.1 is [OEP 1]
 - The issue title has to be `[OEP <n>] <title>`
 - The Issue description is the initial proposal of the OEP.
