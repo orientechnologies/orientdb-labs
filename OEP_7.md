@@ -94,7 +94,7 @@ Keep original cluster design.
 
 1. Because of bigger space needed to store record, initial load will be slower but it is not guaranteed because to create a new record we will 
 need one page instead of two which will also give a good speed up in record creation.
-2. There is a risk of compatibility of versions if some of the users rely on cluster format. 
+2. There is a risk of compatibility of versions if some of the users rely on RID format. 
 
 **Impact matrix**
 
