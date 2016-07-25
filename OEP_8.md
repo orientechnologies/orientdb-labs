@@ -57,6 +57,7 @@ Lock-free operations buffer.
 To gather statics, we will use ring buffer which will be implemented using a plain array.  But this buffer will be presented as not a single instance of the array but as an array of arrays. Each of the arrays will be used by a subset of threads to minimize contention between threads.
 If threshold on one of those arrays will be reached, all those arrays will be emptied by one of the threads by applying tryLock operation which prevents contention between threads. Lock mentioned above is used only during buffer flush and is not used during logging of a statistic inside of buffers. Pointers inside of buffer will be implemented without 
 CAS operations, as a result, few of operations will be lost, but it will not cause significant changes in overall statistics.
+There is limit on amount of records which will be flushed at once per single thread. Eache thread flushes no more than 2 * threshold amount of elements from buffer.
 
 State machine.
 
