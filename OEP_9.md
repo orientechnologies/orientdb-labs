@@ -22,7 +22,7 @@ If we decrease default size of cache page we decrease amplification of read and 
 According to our investigation during the database load:
 
 1. Most of non-leaf index pages are placed into the disk cache and leaf pages are accessed using random IO pattern.
-2. Difference between random IO and sequantiall IO much smaller on modern SSDs and in case of big pages like 64KB can not be neglected.
+2. Difference between random IO and sequantiall IO much smaller on modern SSDs and in case of big pages like 64KB time is needed to write page can be comparable with random access overhead.
 3. All writes which we perform on database are performed using sequential operations if possible.
 4. The smaller size of pages the better efficiency of disk cache.
 
