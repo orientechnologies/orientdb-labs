@@ -24,6 +24,7 @@ According to our investigation during the database load:
 1. Most of non-leaf index pages are placed into the disk cache and leaf pages are accessed using random IO pattern.
 2. Difference between random IO and sequantiall IO much smaller on modern SSDs and in case of big pages like 64KB can not be neglected.
 3. All writes which we perform on database are performed using sequential operations if possible.
+4. The smaller size of pages the better efficiency of disk cache.
 
 All of this suggest do decrease page size from 64KB which is huge to 16 KB, which should increase speed of random IO operations 
 and should not affect or improve speed of write operations.
