@@ -4,7 +4,7 @@ Use 16k pages  for next versions of OrientDB by default
 
 **Goals:**
 
-Improve speed of read/write operation by decreasing of default size of database page
+Improve speed of read/writes operation by decreasing of default size of database page
 
 **Non-Goals:**
 
@@ -23,12 +23,12 @@ According to our investigation during the database load:
 
 1. Most of non-leaf index pages are placed into the disk cache and leaf pages are accessed using random IO pattern.
 2. Difference between random IO and sequantiall IO much smaller on modern SSDs and in case of big pages like 64KB can not be neglected.
-3. All writes which we perform on database are performed using sequentiall operations if possible.
+3. All writes which we perform on database are performed using sequential operations if possible.
 
-All of this suggest do decrease page size from 64KB which is really huge to 16 KB, which should incerease speed of random IO opearations 
-and should not affect or improvde speed of write operations.
+All of this suggest do decrease page size from 64KB which is huge to 16 KB, which should increase speed of random IO operations 
+and should not affect or improve speed of write operations.
 
-Lets check all those speculations by real YCSB benchmark. If we run following YCSB loads (mixed load (50% writes, 50% reads), 
+Let's check all those speculations by real YCSB benchmark. If we run following YCSB loads (mixed load (50% writes, 50% reads), 
 mostly read load (5% writes, 95% reads), read only load (100% of reads)) in case page sizes are 16 KB and 64 KB we get following 
 results:
 
@@ -58,7 +58,7 @@ Total time: 11 hrs 31 mins 58.591 secs = 41 461 secs
 
 *Performance gain - 16k pages 1.61 times faster on load*
 
-**Mixed load 50% of writes , 50% of reads**
+**Mixed load 50% of writes, 50% of reads**
 
 **64k pages**
 
@@ -146,7 +146,7 @@ Thoroughput = 3 210 op/secs
 
 Thoroughput = 14 288 op/secs
 
-*Performance gain : write throughput is almost the same, write latency is improved at 2.6 times.
+*Performance gain: write throughput is almost the same, write latency is improved at 2.6 times.
 Read throughput 1.32 times better, read latency is improved at 3.26 times.*
 
 **Read only workload** 
@@ -181,7 +181,7 @@ Thoroughput = 30 327 op/secs
 
 **Risks and assumptions:**
 
-Maximun key size will be decreased from 10240 to about 5120
+Maximum key size will be decreased from 10240 to about 5120
 
 **Impact matrix**
 
@@ -196,4 +196,3 @@ Maximun key size will be decreased from 10240 to about 5120
 - [ ] Security
 - [ ] Hooks
 - [ ] EE
-
