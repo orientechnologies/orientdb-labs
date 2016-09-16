@@ -170,56 +170,52 @@ To solve the second problem, it is proposed to use deadlock detection which is b
 The detector has O(N) complexity and as result time which is needed to detect deadlock matters of hundreds of nanoseconds at max. So we may execute deadlock detection every 0.1 usec without risk of performance loss in case of presence of deadlock.
 
 ###Low-level design
+Some parts of the design have already implemented and described here for clarity.
 
-Some parts of design has already implemented and descrabid here for clarity.
-
-Lets look at data strucuctures are used in current transaction protocol.
+Let's look at data structures are used in current transaction protocol.
 
 **Log records**
 
 Log records contains following fields:
 
-1. LSN of the record. This value grows continously and presents logical address of log record inside of WAL.
-2. Transaction id. This id should not be UUID, usage of simple counter will be enough.
-3. PrevLSN. LSN of previous record written by the same transaction.
-4. PageID. Id of chnaged page.
-5. FileID. Id of file which contains changed record.
+1. LSN of the record. This value grows continuously and presents the logical address of log record inside of WAL.
+2. Transaction id. This id should not be UUID, usage of the simple counter will be enough.
+3. PrevLSN. LSN of the previous record written by the same transaction.
+4. PageID. The id of the chnaged page.
+5. FileID. The id of a file which contains changed record.
 6. UndoNextLSN. Exists only in CLR records. Pointer to the next log record which should be rolled back.
 7. Data. Undo and redo data. Either one or both of them may be empty.
 
 **Pages**
 
-Each page contains pageLSN field. Each page update looks like following:
+Each page contains the pageLSN field. Each page update looks like following:
 
 1. Page lock is acquired.
-2. Page is changed.
-3. Page changes are loged into WAL.
+2. The page is changed.
+3. Page changes are logged into WAL.
 4. LSN of WAL record is set to pageLSN field.
 
-When buffer commits page to the disk it checks that all records of WAL are flushed at least till the LSN stored in pageLSN.
-If that is not true flush of WAL content is performed.
+When buffer commits page to the disk, it checks that all records of WAL are flushed at least till the LSN stored in pageLSN.
+If that is not the true flush of WAL content is performed.
 
 **Transaction table**
 
-This table is used to track state of active transactions during normal processing of transaction and during restore of database after 
-crash. In our project it will be implemented as mix of two classes atomic operation manager and atomic operation itself.
+This table is used to track the state of active transactions during normal processing of the transaction and restore of a database after a crash. In our project, it will be implemented as a mix of two classes atomic operation manager and the atomic operation itself.
 
 It contains following fields:
 
 1. Transaction id.
-2. Last LSN. LSN of last log record written by transaction.
+2. Last LSN. LSN of last log record written by a transaction.
 3. UndoNextLSN. LSN of next record processed during rollback. If the most recent log record written or seen for this transaction is an
-undoable non-CLR log record, then this field’s value will be set to LastLSN.
-If that most recent log record is a CLR, then this field’s value is set to the
-UndoNxtLSN value from that CLR.
+undoable non-CLR log record, then this field’s value will be set to last LSN. If that most recent log record is a CLR, then this field’s value is set to the UndoNxtLSN value from that CLR.
 
 **Dirty pages table**
 
-This table contains all pages which are not written to the disk yet. Table consists of three fields (pageID, fileID, dirtyLSN). Dirty LSN value is calculated using following approach. If page is acquired from the disk cache and changed for the first time LSN of this change is written to the dirty pages table. This table shows LSN of operations which are probably are not stored on the disk yet. Once page is flushed to the disk its entry is removed from dirty pages table. 
+This table contains all pages which are not written to the disk yet. Table consists of three fields (pageID, fileID, dirtyLSN). Dirty LSN value is calculated using the following approach. If a page is acquired from the disk cache for update then value of latest LSN opertion chich is written to the log becomes value of dirtyLSN. This table shows LSN of operations which are probably are not stored on the disk yet. Once a page is flushed to the disk its entry is removed from dirty pages table. 
 
 **Rollbacks**
 
-Protocol supports partial rollbacks till provided LSN. This feature is used for example to rollback ridbag operations after deadlock is detected. It is possilble because of usage of CLRs which allow to rewind transaction till desired point.
+The protocol supports partial rollbacks till provided LSN. This feature is used for example to rollback ridbag operations after deadlock is detected. It is possible because of usage of CLRs which allow rewinding transaction until desired point.
 
 Pseudo code for rollback looks like following:
 
@@ -232,9 +228,9 @@ rollback(saveLSN, transID) {
   if(logRecord is update record) {
    if(logRecord.data.undo is not empty) {
     page = diskCache.acquire();
-    undoPage(page, logRecord);//real undo operation depend on undo information it may be logical rollback
+    undoPage(page, logRecord);//the real undo operation depends on undo information it may be logical rollback
     // or may be rollback of content of single page
-    clrLSN = wal.log(new CLR(logRecord.transID, transTable.get(transID).lastLSN /*prevLSN*/, logRecord.fileID, logRecord.pageID, logRecord.data.undo)); //write CLR
+    clrLSN = wal.log(new CLR(logRecord.transID, transTable.get(transID).lastLSN /*prevLSN*/, logRecord.fileID, logRecord.pageID, logRecord.prevLSN/*undoNextLSN*/, logRecord.data.undo)); //write CLR
     page.pageLSN = clrLSN;
     diskCache.releasePage(page);
    }
@@ -249,6 +245,118 @@ rollback(saveLSN, transID) {
  }
 }
 ```
+
+**Checkpoints**
+
+Obviously that is impossible to write log forever also that is very time consuming to restore database from the first operaton 
+ever performed on the database. To solve this porblems we periodically make checkpoints of database content.
+
+During checkpoint following actions are performed:
+
+1. Log record which indicates that check point is started is written to the WAL. LSN of this record is written to the WAL master
+record once log record which indicates end checkpoint is flushed to the disk. Which is special place in WAL writes to which always forced to the disk. Also its content is protected by CRC32 code and by usage of Twin blocks pattern.
+2. Background flush of dirty pages is stoped.
+3. All the files are force synced to the disk (only files not content of the disk cache).
+4. Dirty pages table is written to the disk.
+5. Background flash of dirty pages is started.
+5. Transaction table is written to the disk.
+5. Log record which indicates that check point is stopped is written to the WAL.
+6. WAL content is flushed to the disk.
+7. At this point we can cut WAL till the first log record which is smaller than minimum record in dirty pages table.
+
+
+Checkpoint is treated to be valid only when restore process reads "end checkpoint" record.
+During checkpoint transactions can be processed and data can be written, correct state of those tables will be restored 
+during analyssis pass of data restore process.
+
+
+**Restore data after crash**
+
+Data restore process consist of three passes:
+
+1. Analysis pass. This pass accepts LSN of checkpoint as input data and returns: dirty pages table, transaction table and 
+redo LSN (LSN of record from which redo pass will restore data).
+2. Redo pass. During this pass state of all transactions is restored.
+3. Undo pass. During this pass all unfinished operations are reverted.
+4. At the end of restore process checkpoint is made.
+
+Pseudo code of restore process is following:
+
+```
+restart(checkpointLSN) {
+ redoLSN = restartAnalysis(checkpointLSN, transTable, dirtyPages);
+ restartRedo(redoLSN, transTable, dirtyPages);
+ restartUndo(transTable);
+ 
+ checkpoint();
+}
+```
+
+**Analysis Pass**
+
+The only records which are written at this pass is the tansaction end record which indicates that transaction is finished.
+
+During this pass, if a log record is encountered for a page whose identity does not already appear in the dirty pages table, then an entry is made in the table with the current log record’s LSN as the page’s recLSN. The transaction table is modified to track the state changes of transactions and also to note the LSN of the most recent log record that would need to be
+undone if it were determined that the transaction had to be rolled back.
+
+Returned redo LSN is minimum LSN of the page.
+
+Pseudo code for analysis pass looks like following:
+
+```java
+restartAnalysis(checkpointLSN, transTable, dirtyPages) {
+  logRec = wal.read(checkpointLSN);
+  logRec = wal.readNext(logRec.lsn);//skip checkpoint record
+  while(logRec != null) { // loop till the end of the log
+   if(logRec is transaction related record && !transTable.contains(logRec.transID)) { //we put in the log service records too
+     transTable.put(logRec.transID, logRec.lsn/*last LSN*/, logRec.prevLSN/*undoNextLSN*/); //insert entry in transaction table
+   }
+   if((logRec is update) || (logRec is CLR)) {
+    transTable.get(logRec.transID).lastLSN = logRec.lsn;
+    if(logRec is update) {
+     if(logRec.data.undo != null) {
+      transTable.get(logRec.transID).undoNextLSN = logRec.lsn;
+     }
+    } else {
+     transTable.get(logRec.transID).undoNextLSN = logRec.undoNextLSN;
+    }
+    
+    if(logRec.data.redo != null && !dirtyPages.contains(logRec.pageID)) {
+     dirtyPages.put(logRec.pageID, logRec.lsn); 
+    }
+   } else if(logRec is end checkpoint record) {
+    for(entry : logRec.transTable) {
+     if(!transTable.contains(entry.transID)) {
+      transTable.put(entry.transID, entry);
+     }
+    }
+    
+    for(entry : logRec.dirtyPages) {
+     if(!dirtyPages.contains(entry.pageID)) {
+      dirtyPages.put(entry.pageID, entry.recLSN);
+     } else {
+      dertyPages.get(entry.pageID).recLSN = entry.recLSN;
+     }
+    }
+    
+   } else if(logRec is transaction end record) {
+    transTable.remove(logRec.transID);
+   }
+   
+   logRec = wal.readNext(logRec.lsn); 
+  }
+  
+  for(entry : transTable) {
+   if(entry.undoNextLSN == null) { // end of transaction
+    wal.log(new TxEND(entry.transID));
+    transTable.remove(entry.transID);
+   }
+  }
+  
+  return min(dirtyPages.recLSN);
+}
+```
+
 
 ##Alternatives:
 
