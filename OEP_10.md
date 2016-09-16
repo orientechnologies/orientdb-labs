@@ -171,6 +171,84 @@ The detector has O(N) complexity and as result time which is needed to detect de
 
 ###Low-level design
 
+Some parts of design has already implemented and descrabid here for clarity.
+
+Lets look at data strucuctures are used in current transaction protocol.
+
+**Log records**
+
+Log records contains following fields:
+
+1. LSN of the record. This value grows continously and presents logical address of log record inside of WAL.
+2. Transaction id. This id should not be UUID, usage of simple counter will be enough.
+3. PrevLSN. LSN of previous record written by the same transaction.
+4. PageID. Id of chnaged page.
+5. FileID. Id of file which contains changed record.
+6. UndoNextLSN. Exists only in CLR records. Pointer to the next log record which should be rolled back.
+7. Data. Undo and redo data. Either one or both of them may be empty.
+
+**Pages**
+
+Each page contains pageLSN field. Each page update looks like following:
+
+1. Page lock is acquired.
+2. Page is changed.
+3. Page changes are loged into WAL.
+4. LSN of WAL record is set to pageLSN field.
+
+When buffer commits page to the disk it checks that all records of WAL are flushed at least till the LSN stored in pageLSN.
+If that is not true flush of WAL content is performed.
+
+**Transaction table**
+
+This table is used to track state of active transactions during normal processing of transaction and during restore of database after 
+crash. In our project it will be implemented as mix of two classes atomic operation manager and atomic operation itself.
+
+It contains following fields:
+
+1. Transaction id.
+2. Last LSN. LSN of last log record written by transaction.
+3. UndoNextLSN. LSN of next record processed during rollback. If the most recent log record written or seen for this transaction is an
+undoable non-CLR log record, then this field’s value will be set to LastLSN.
+If that most recent log record is a CLR, then this field’s value is set to the
+UndoNxtLSN value from that CLR.
+
+**Dirty pages table**
+
+This table contains all pages which are not written to the disk yet. Table consists of three fields (pageID, fileID, dirtyLSN). Dirty LSN value is calculated using following approach. If page is acquired from the disk cache and changed for the first time LSN of this change is written to the dirty pages table. This table shows LSN of operations which are probably are not stored on the disk yet. Once page is flushed to the disk its entry is removed from dirty pages table. 
+
+**Rollbacks**
+
+Protocol supports partial rollbacks till provided LSN. This feature is used for example to rollback ridbag operations after deadlock is detected. It is possilble because of usage of CLRs which allow to rewind transaction till desired point.
+
+Pseudo code for rollback looks like following:
+
+```java
+rollback(saveLSN, transID) {
+ undoNext = transTable.get(transID).undoNextLSN; // LSN of first record to undo
+ while(saveLSN < undoNext) //loop through all records
+ {
+  logRecord = wal.read(undoNext);
+  if(logRecord is update record) {
+   if(logRecord.data.undo is not empty) {
+    page = diskCache.acquire();
+    undoPage(page, logRecord);//real undo operation depend on undo information it may be logical rollback
+    // or may be rollback of content of single page
+    clrLSN = wal.log(new CLR(logRecord.transID, transTable.get(transID).lastLSN /*prevLSN*/, logRecord.fileID, logRecord.pageID, logRecord.data.undo)); //write CLR
+    page.pageLSN = clrLSN;
+    diskCache.releasePage(page);
+   }
+   undoNext = logRecord.prevLSN;
+  } else if(logRecord is CLR) {
+   undoNext = logRecord.undoNextLSN; 
+  } else {
+   undoNext = logRecord.prevLSN;
+  }
+  
+  transTable.get(transID).undoNextLSN = undoNext;
+ }
+}
+```
 
 ##Alternatives:
 
