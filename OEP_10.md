@@ -145,6 +145,30 @@ Restore logic is same as logic during rollback with the only exception that we d
 
 Once again it is worth to note that all those procedures will work even if we will use component locks, not page locks, providing a much better level of scalability without of changing of component implementation.
 
+Let's estimate risks of a presence of deadlocks in proposed transaction protocol and approaches to avoid them.
+
+In a current implementation, we track changes which are going to be applied both to records, and key indexes.
+To prevent deadlocks between records and keys we need to sort all records and all keys and acquire locks for all of them before we start transaction inside of storage. 
+
+Such approach will prevent any deadlocks between keys and existing records.
+But there are still two variants of deadlocks:
+
+1. RIDs of new records are unknown before insertion, so before acquiring a lock on the RID we need to acquire page locks to get a value of the RID, but during record read, we acquire locks in opposite direction which may lead to deadlock. Such cases are very rare. For most of the cases, we will not provide invalid RIDs to read record content, but such case is still possible.
+2. We do not track changes of ridbags which are implemented as small trees and also there is an automatical conversion between embedded and tree version of presentation of ridbag.  
+
+To solve the first problem, we will use "try locks."
+Algorithm of insertion of records will look like following:
+
+1. Make structure modification changes and remember the position of record content.
+2. Lock domain page, but not change it, instead calculate RID value.
+3. Try to acquire  record lock if attempt is failed release page locks
+4. Acquire record lock with calculated RID.
+5. Acquire cluster page locks.
+6. Acquire domain page and if RID is still the same complete change, otherwise, calculate new RID and repeat algorithm.
+
+To solve the second problem, it is proposed to use deadlock detection which is based on an algorithm of finding of cycles in "wait-for" graph. When a deadlock is detected, system rollbacks operation on one of the ridbags and will repeat it later.  Such log detector is implemented on 80%  in https://github.com/orientechnologies/orientdb/tree/dreadlock/core/src/main/java/com/orientechnologies/common/concur/dreadlock. 
+The detector has O(N) complexity and as result time which is needed to detect deadlock matters of hundreds of nanoseconds at max. So we may execute deadlock detection every 0.1 usec without risk of performance loss in case of presence of deadlock.
+
 ###Low-level design
 
 
