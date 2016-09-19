@@ -459,9 +459,16 @@ In undo pass all CLR records from single transaction has to be chained so we may
 
 ##Alternatives:
 
+There are several proposed alternatives, the main differences between current proposal and the rest are following:
+
+1. Lock based proposals are page based, not key/record based. Page based locks are too expencive for indexes because single non-leaf
+page locks may block a lot of underlying pages.
+2. Some of the lock based proposals do not take issue with ridbag and possible deadlocks into account.
+3. CAS based approaches may lead to performance degradation in case of a high load.
 
 ##Risks and assumptions:
 
+There is a risk of data corruption in case of incorrect implementation of data rollback or data restore.
 
 ##Impact matrix
 
