@@ -145,6 +145,19 @@ Restore logic is same as logic during rollback with the only exception that we d
 
 Once again it is worth to note that all those procedures will work even if we will use component locks, not page locks, providing a much better level of scalability without of changing of component implementation.
 
+The isolation of visibility of changes for single item requests for cluster and index is trivial. 
+We lock record or item inside of transaction then try to find this item inside of index or lock.
+
+Implementation of range queries or iteration over ridbag or cluster is a bit complex:
+
+1.  We lock page which contains given record or key
+2.  Try to lock record or index
+3.  If lock attempt fails, we release page
+4.  Lock the record or key
+5.  Lock the page 
+6.  Check presence of key or record 
+7.  Continue to iterate over data structure
+
 Let's estimate risks of a presence of deadlocks in proposed transaction protocol and approaches to avoid them.
 
 In a current implementation, we track changes which are going to be applied both to records, and key indexes.
