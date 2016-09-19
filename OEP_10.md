@@ -233,6 +233,8 @@ rollback(saveLSN, transID) {
     clrLSN = wal.log(new CLR(logRecord.transID, transTable.get(transID).lastLSN /*prevLSN*/, logRecord.fileID, logRecord.pageID, logRecord.prevLSN/*undoNextLSN*/, logRecord.data.undo)); //write CLR
     page.pageLSN = clrLSN;
     diskCache.releasePage(page);
+    
+    transTable.get(transID).lastLSN = clrLSN;
    }
    undoNext = logRecord.prevLSN;
   } else if(logRecord is CLR) {
@@ -254,7 +256,7 @@ ever performed on the database. To solve this porblems we periodically make chec
 During checkpoint following actions are performed:
 
 1. Log record which indicates that check point is started is written to the WAL. LSN of this record is written to the WAL master
-record once log record which indicates end checkpoint is flushed to the disk. Which is special place in WAL writes to which always forced to the disk. Also its content is protected by CRC32 code and by usage of Twin blocks pattern.
+record once log record which indicates end checkpoint is flushed to the disk. Master record is special place in WAL, writes to which always forced to the disk. Also its content is protected by CRC32 code and by usage of Twin blocks pattern.
 2. Background flush of dirty pages is stoped.
 3. All the files are force synced to the disk (only files not content of the disk cache).
 4. Dirty pages table is written to the disk.
@@ -279,13 +281,16 @@ redo LSN (LSN of record from which redo pass will restore data).
 2. Redo pass. During this pass state of all transactions is restored.
 3. Undo pass. During this pass all unfinished operations are reverted.
 4. At the end of restore process checkpoint is made.
+ 
+Please note that WAL operations are mostly sequantial (with exception of Undo pass) and several sequantial passes of WAL will not provide niticable pefromance overhead. Main target of anallysis pass is to minimize amount of random IO operations caused by 
+page loads.
 
 Pseudo code of restore process is following:
 
 ```
 restart(checkpointLSN) {
  redoLSN = restartAnalysis(checkpointLSN, transTable, dirtyPages);
- restartRedo(redoLSN, transTable, dirtyPages);
+ restartRedo(redoLSN, dirtyPages);
  restartUndo(transTable);
  
  checkpoint();
@@ -299,7 +304,7 @@ The only records which are written at this pass is the tansaction end record whi
 During this pass, if a log record is encountered for a page whose identity does not already appear in the dirty pages table, then an entry is made in the table with the current log record’s LSN as the page’s recLSN. The transaction table is modified to track the state changes of transactions and also to note the LSN of the most recent log record that would need to be
 undone if it were determined that the transaction had to be rolled back.
 
-Returned redo LSN is minimum LSN of the page.
+Returned redo LSN is minimum LSN of the dirty pages table.
 
 Pseudo code for analysis pass looks like following:
 
@@ -348,7 +353,7 @@ restartAnalysis(checkpointLSN, transTable, dirtyPages) {
   
   for(entry : transTable) {
    if(entry.undoNextLSN == null) { // end of transaction
-    wal.log(new TxEND(entry.transID));
+    wal.log(new TxEND(entry.transID, entry.lastLSN));
     transTable.remove(entry.transID);
    }
   }
@@ -356,6 +361,98 @@ restartAnalysis(checkpointLSN, transTable, dirtyPages) {
   return min(dirtyPages.recLSN);
 }
 ```
+
+
+
+**Redo pass**
+
+The redo pass starts scanning the log records from the RedoLSN point. When a redoable log record is encountered, 
+a check is made to see if the referenced page appears in the dirty pages table. If page is not present in dirty pages table then it is already flushed on disk and result of operation is not lost and not needed to be restored. If the log record’s LSN is greater than or equal to the recLSN for the page in the table, then it is suspected that the page state might be such that the log record’s update might have to be redone. To resolve this suspicion, the page is accessed. Then CRC32 code of page content is calculated. If CRC32 codes calculated and stored inside of page are not equal then conent of the page was written only at half since the last flush and change on the page has to be redone. If CRC32 codes are equal we compare LSNs of page and log record.  If the page’s LSN is found to be less than the log record’s LSN, then the update is redone. Thus, the RecLSN information serves to limit the number of pages which have to be examined.  This routine reestablishes the database state as of the time of system failure.
+
+Pseudo code for redo pass looks like following:
+
+```java
+restartRedo(redoLSN, dirtyPages) {
+ logRecord = wal.read(redoLSN);
+ while(logRecord != null) {
+  if((logRecord is update || logRecord is CLR) && logRecord.data.redo != null && 
+  dirtyPages.contains(logRecord.pageID) && logRecord.lsn >= dirtyPages.get(logRecord.pageID).recLSN) {
+   page = diskCache.acquire();
+   crc32 = calculateCRC32(page);
+   
+   if(crc32 != page.crc32) {    //record content is broken we update it anyway 
+    redoUpdate(page, logRecord);
+    page.lsn = logRecord.lsn;
+   } else {
+    if(page.lsn < logRecord.lsn) {
+     redoUpdate(page, logRecord);
+     page.lsn = logRecord.lsn;
+    } else {
+     dirtyPages.get(logRecord.pageID).recLSN =  page.lsn + 1; //dirty pages contiains out of dated information, we update it to prevent //loading of allready stored operations
+    }
+   }
+   
+   diskCache.release(page);
+  }
+  
+  logRecord = wal.readNext(logRecord.lsn);
+ }
+}
+```
+
+**Undo pass**
+
+The input to this routine is the restart transaction table. The dirty pages table is not consulted during this undo pass. 
+Also, since history is repeated before the undo pass is initiated, the LSN on the page is not consulted to determine whether an undo operation should be performed or not. The restart undo routine rolls back losers transactions, in reverse chronological
+order, in a single sweep of the log. This is done by continually taking the maximum of the LSNS of the next log record to be processed for each of the yet-to-be-completely-undone transactions, until no transaction remains to be undone. The next record to process for each transaction to be rolled back is determined by an entry in the transaction table for each of those transactions.
+In the process of rolling back the transactions, this routine writes CLRS.
+
+```java
+restartUndo(transTable) {
+ while(!transTable.isEmpty()) {
+  undoNextLSN = max(transTable.undoNextLSN);
+  logRecord = wal.read(undoNextLSN);
+  
+  if(logRecord is update) {
+   if(logRecord.data.undo != null) {
+    page = diskCache.acquire(logRecord.pageID);
+    undoPage(page, logRecord);
+    
+    clrLSN = wal.log(new CLR(logRecord.transID, transTable.get(transID).lastLSN /*prevLSN*/, logRecord.fileID, logRecord.pageID, logRecord.prevLSN/*undoNextLSN*/, logRecord.data.undo)); //write CLR
+    
+    page.pageLSN = clrLSN;
+    diskCache.releasePage(page);
+    
+    transTable.get(transID).lastLSN = clrLSN;
+    
+    diskCache.release(page);
+   }
+   
+   transTable.get(transID).undoNextLSN = logRecord.prevLSN;
+   
+   if(logRecord.prevLSN == null) {
+    wal.log(new EndTX(logRecord.transID, transTable.get(logRecord.transIS).lastLSN));
+    transTable.remove(logRecord.transID);
+   }
+  } else if(logRecord is CLR) {
+   transTable.get(logRecord.transID).undoNextLSN = logRecord.undoNextLSN;
+  }
+ }
+}
+```
+
+**Parallelisataion of data restore after crash**
+
+Time of speed of data restore is critical for applications which relyes on database high avalaibility. 
+There are two approaches how time of data restore can be decreased:
+
+1. Minimize amount of pages which can be accessed during data restore.
+2. Restore transaction in parallel threads.
+
+In "redo pass" is only limitation is that all changes applyed to the pages have to be ordered.
+So during redo pass we may read all redo changes and partition actuall redo operations between different threads.
+
+In undo pass all CLR records from single transaction has to be changed so we may process undo operations in parallel too but all processing will be partitioned using entreis of transaction table.
 
 
 ##Alternatives:
