@@ -170,18 +170,19 @@ To solve the second problem, it is proposed to use deadlock detection which is b
 The detector has O(N) complexity and as result time which is needed to detect deadlock matters of hundreds of nanoseconds at max. So we may execute deadlock detection every 0.1 usec without risk of performance loss in case of presence of deadlock.
 
 ###Low-level design
+
 Some parts of the design have already implemented and described here for clarity.
 
 Let's look at data structures are used in current transaction protocol.
 
 **Log records**
 
-Log records contains following fields:
+Log records contain following fields:
 
-1. LSN of the record. This value grows continuously and presents the logical address of log record inside of WAL.
-2. Transaction id. This id should not be UUID, usage of the simple counter will be enough.
+1. LSN of the record. This value grows continuously and presents the logical address of the log record inside of WAL.
+2. Transaction id. It has not to be UUID, usage of the simple counter will be enough. 
 3. PrevLSN. LSN of the previous record written by the same transaction.
-4. PageID. The id of the chnaged page.
+4. PageID. The id of the changed page.
 5. FileID. The id of a file which contains changed record.
 6. UndoNextLSN. Exists only in CLR records. Pointer to the next log record which should be rolled back.
 7. Data. Undo and redo data. Either one or both of them may be empty.
@@ -194,15 +195,16 @@ Each page contains the pageLSN and CRC32 fields. Each page update looks like fol
 2. The page is changed.
 3. Page changes are logged into WAL.
 4. LSN of WAL record is set to pageLSN field.
+5. Page lock is released.
 
 When buffer flushes page to the disk, it checks that all records of WAL are flushed at least till the LSN stored in pageLSN.
-If that is not the true flush of WAL content is performed. During page flush CRC32 code for page content including pageLSN filed is calculated and assegned to the crc32 field. CRC32 field is used to detect whether page is partially flushed to the disk because of the process crash.
+If that is not the true flush of WAL content is performed. During page flush, CRC32 code for page content including pageLSN is calculated and assigned to the CRC32 field. CRC32 field is used to detect whether a page is partially flushed to the disk because of the process crash.
 
 **Transaction table**
 
-This table is used to track the state of active transactions during normal processing of the transaction and restore of a database after a crash. In our project, it will be implemented as a mix of two classes atomic operation manager and the atomic operation itself.
+This table is used to track the state of the active transactions during normal processing of the transaction and restore of a database after a crash. In our project, it will be implemented as a mix of two classes atomic operations manager and the atomic operation itself.
 
-It contains following fields:
+Transaction table contains following fields:
 
 1. Transaction id.
 2. Last LSN. LSN of last log record written by a transaction.
@@ -211,11 +213,11 @@ undoable non-CLR log record, then this field’s value will be set to last LSN. 
 
 **Dirty pages table**
 
-This table contains all pages which are not written to the disk yet. Table consists of three fields (pageID, fileID, dirtyLSN). Dirty LSN value is calculated using the following approach. If a page is acquired from the disk cache for update then value of latest LSN opertion chich is written to the log becomes value of dirtyLSN. This table shows LSN of operations which are probably are not stored on the disk yet. Once a page is flushed to the disk its entry is removed from dirty pages table. 
+This table contains all pages which are not written to the disk yet. Table consists of three fields (pageID, fileID, dirtyLSN). Dirty LSN value is calculated using the following approach. If a page is acquired from the disk cache for an update, then a value of latest LSN operation which is written to the log becomes a value of dirtyLSN. This table shows LSN of operations which are probably are not stored on the disk yet. Once a page is written to the disk its entry is removed from dirty pages table. 
 
 **Rollbacks**
 
-The protocol supports partial rollbacks till provided LSN. This feature is used for example to rollback ridbag operations after deadlock is detected. It is possible because of usage of CLRs which allow rewinding transaction until desired point.
+The protocol supports partial rollbacks till provided LSN. This feature is used for example to rollback ridbag operations after deadlock is detected. It is possible because of usage of CLRs which allow rewinding transaction until the desired point.
 
 Pseudo code for rollback looks like following:
 
@@ -231,16 +233,18 @@ rollback(saveLSN, transID) {
     undoPage(page, logRecord);//the real undo operation depends on undo information it may be logical rollback
     // or may be rollback of content of single page
     clrLSN = wal.log(new CLR(logRecord.transID, transTable.get(transID).lastLSN /*prevLSN*/, logRecord.fileID, logRecord.pageID, logRecord.prevLSN/*undoNextLSN*/, logRecord.data.undo)); //write CLR
-    page.pageLSN = clrLSN;
-    diskCache.releasePage(page);
+    page.pageLSN = clrLSN; 
+    diskCache.releasePage(page); //in case of logical undo the only CLR record is written because changes of content of the page 
+    //are logged in other records
     
     transTable.get(transID).lastLSN = clrLSN;
    }
+   
    undoNext = logRecord.prevLSN;
   } else if(logRecord is CLR) {
    undoNext = logRecord.undoNextLSN; 
   } else {
-   undoNext = logRecord.prevLSN;
+   undoNext = logRecord.prevLSN; //service record just skip it
   }
   
   transTable.get(transID).undoNextLSN = undoNext;
@@ -250,56 +254,41 @@ rollback(saveLSN, transID) {
 
 **Checkpoints**
 
-Obviously that is impossible to write log forever also that is very time consuming to restore database from the first operaton 
-ever performed on the database. To solve this porblems we periodically make checkpoints of database content.
+Obviously, it is impossible to write log forever. Also, it is very time consuming to restore the database from the first operation ever performed on the database. To solve those problems we periodically make checkpoints of database content.
 
 During checkpoint following actions are performed:
 
 1. Log record which indicates that check point is started is written to the WAL. LSN of this record is written to the WAL master
-record once log record which indicates end checkpoint is flushed to the disk. Master record is special place in WAL, writes to which always forced to the disk. Also its content is protected by CRC32 code and by usage of Twin blocks pattern.
-2. Background flush of dirty pages is stoped.
-3. All the files are force synced to the disk (only files not content of the disk cache).
+record once log record which indicates end checkpoint is flushed to the disk. Master record is a special place in WAL, writes to which always forced to the disk. Also, its content is protected by CRC32 code and by usage of Twin Blocks pattern.
+2. Background flush of dirty pages is stoped. We can not write dirty pages table without force sync because of presence internal caches inside of disk drives and OS.
+3. All the files are force synced to the disk (only files not a content of the disk cache).
 4. Dirty pages table is written to the disk.
-5. Background flash of dirty pages is started.
+5. Background flush of dirty pages is started. 
 5. Transaction table is written to the disk.
 5. Log record which indicates that check point is stopped is written to the WAL.
 6. WAL content is flushed to the disk.
-7. At this point we can cut WAL till the first log record which is smaller than minimum record in dirty pages table.
+7. At this point, we can cut WAL till the first log record which is smaller than minimum LSN in dirty pages table.
 
 
-Checkpoint is treated to be valid only when restore process reads "end checkpoint" record.
-During checkpoint transactions can be processed and data can be written, correct state of those tables will be restored 
-during analyssis pass of data restore process.
-
+The checkpoint is treated to be valid only when "end checkpoint" record is stored to the disk.
+During a checkpoint, transactions can be processed, and data can be written, the correct state of dirty pages and transaction tables will be restored during analysis pass of data restore process.
 
 **Restore data after crash**
 
 Data restore process consist of three passes:
 
-1. Analysis pass. This pass accepts LSN of checkpoint as input data and returns: dirty pages table, transaction table and 
-redo LSN (LSN of record from which redo pass will restore data).
+1. Analysis pass. This pass accepts LSN of the checkpoint as input data and returns: dirty pages table, transaction table and redo LSN (LSN of record from which redo pass will restore data).
 2. Redo pass. During this pass state of all transactions is restored.
-3. Undo pass. During this pass all unfinished operations are reverted.
-4. At the end of restore process checkpoint is made.
+3. Undo pass. During this pass, all unfinished operations are reverted.
+4. At the end of the restore process, a checkpoint is made. It is not needed to flush buffer at this point.
+5. Transaction id counter is set to the maximum value of transaction id in a transaction table.
  
-Please note that WAL operations are mostly sequantial (with exception of Undo pass) and several sequantial passes of WAL will not provide niticable pefromance overhead. Main target of anallysis pass is to minimize amount of random IO operations caused by 
+Please note that WAL operations are mostly sequential (with exception of Undo pass), and several subsequent passes of WAL will not provide noticeable performance overhead. The main target of analysis pass is to minimize amount of random IO operations caused by 
 page loads.
-
-Pseudo code of restore process is following:
-
-```
-restart(checkpointLSN) {
- redoLSN = restartAnalysis(checkpointLSN, transTable, dirtyPages);
- restartRedo(redoLSN, dirtyPages);
- restartUndo(transTable);
- 
- checkpoint();
-}
-```
 
 **Analysis Pass**
 
-The only records which are written at this pass is the tansaction end record which indicates that transaction is finished.
+The only records which are written at this pass are the transaction end records which indicates that transaction is finished.
 
 During this pass, if a log record is encountered for a page whose identity does not already appear in the dirty pages table, then an entry is made in the table with the current log record’s LSN as the page’s recLSN. The transaction table is modified to track the state changes of transactions and also to note the LSN of the most recent log record that would need to be
 undone if it were determined that the transaction had to be rolled back.
@@ -316,8 +305,10 @@ restartAnalysis(checkpointLSN, transTable, dirtyPages) {
    if(logRec is transaction related record && !transTable.contains(logRec.transID)) { //we put in the log service records too
      transTable.put(logRec.transID, logRec.lsn/*last LSN*/, logRec.prevLSN/*undoNextLSN*/); //insert entry in transaction table
    }
+   
    if((logRec is update) || (logRec is CLR)) {
     transTable.get(logRec.transID).lastLSN = logRec.lsn;
+    
     if(logRec is update) {
      if(logRec.data.undo != null) {
       transTable.get(logRec.transID).undoNextLSN = logRec.lsn;
@@ -353,7 +344,7 @@ restartAnalysis(checkpointLSN, transTable, dirtyPages) {
   
   for(entry : transTable) {
    if(entry.undoNextLSN == null) { // end of transaction
-    wal.log(new TxEND(entry.transID, entry.lastLSN));
+    wal.log(new TxEND(entry.transID, entry.lastLSN /*prevLSN*/));
     transTable.remove(entry.transID);
    }
   }
@@ -362,12 +353,9 @@ restartAnalysis(checkpointLSN, transTable, dirtyPages) {
 }
 ```
 
-
-
 **Redo pass**
 
-The redo pass starts scanning the log records from the RedoLSN point. When a redoable log record is encountered, 
-a check is made to see if the referenced page appears in the dirty pages table. If page is not present in dirty pages table then it is already flushed on disk and result of operation is not lost and not needed to be restored. If the log record’s LSN is greater than or equal to the recLSN for the page in the table, then it is suspected that the page state might be such that the log record’s update might have to be redone. To resolve this suspicion, the page is accessed. Then CRC32 code of page content is calculated. If CRC32 codes calculated and stored inside of page are not equal then conent of the page was written only at half since the last flush and change on the page has to be redone. If CRC32 codes are equal we compare LSNs of page and log record.  If the page’s LSN is found to be less than the log record’s LSN, then the update is redone. Thus, the RecLSN information serves to limit the number of pages which have to be examined.  This routine reestablishes the database state as of the time of system failure.
+The redo pass starts scanning the log records from the RedoLSN point. When a redoable log record is encountered,  a check is made to see if the referenced page appears in the dirty pages table. If a page is not present in dirty pages table then it is already flushed on disk and result of an operation is not lost and not needed to be restored. If the log record’s LSN is greater than or equal to the recLSN for the page on the table, then it is suspected that the page state might be such that the log record’s update might have to be redone. To resolve this suspicion, the page is accessed. Then CRC32 code of page content is calculated. If CRC32 codes calculated and stored inside of page are not equal then the content of the page was written only at the half since the last flush and change on the page has to be redone. If CRC32 codes are equal, we compare LSNs of the page and log record.  If the page’s LSN is found to be less than the log record’s LSN, then the update is redone. Thus, the RecLSN information serves to limit the number of pages which have to be examined.  This routine reestablishes the database state as of the time of system failure.
 
 Pseudo code for redo pass looks like following:
 
@@ -388,7 +376,7 @@ restartRedo(redoLSN, dirtyPages) {
      redoUpdate(page, logRecord);
      page.lsn = logRecord.lsn;
     } else {
-     dirtyPages.get(logRecord.pageID).recLSN =  page.lsn + 1; //dirty pages contiains out of dated information, we update it to prevent //loading of allready stored operations
+     dirtyPages.get(logRecord.pageID).recLSN =  page.lsn + 1; //dirty pages contain out of dated information, we update it to prevent //loading of allready stored operations
     }
    }
    
@@ -403,9 +391,11 @@ restartRedo(redoLSN, dirtyPages) {
 **Undo pass**
 
 The input to this routine is the restart transaction table. The dirty pages table is not consulted during this undo pass. 
-Also, since history is repeated before the undo pass is initiated, the LSN on the page is not consulted to determine whether an undo operation should be performed or not. The restart undo routine rolls back losers transactions, in reverse chronological
-order, in a single sweep of the log. This is done by continually taking the maximum of the LSNS of the next log record to be processed for each of the yet-to-be-completely-undone transactions, until no transaction remains to be undone. The next record to process for each transaction to be rolled back is determined by an entry in the transaction table for each of those transactions.
-In the process of rolling back the transactions, this routine writes CLRS.
+Also, since history is repeated before the undo pass is initiated, the LSN on the page is not consulted to determine whether an undo operation should be performed or not. The restart undo routine rolls back transactions, in reverse chronological
+order, in a single sweep of the log. This is done by continually taking the maximum of the LSNs of the next log record to be processed for each of the yet-to-be-completely-undone transactions until no transaction remains to be undone. The next record to process for each transaction to be rolled back is determined by an entry in the transaction table for each of those transactions.
+In the process of rolling back the transactions, this routine writes CLRs.
+
+Pseudo code for the undo pass looks like following:
 
 ```java
 restartUndo(transTable) {
@@ -443,17 +433,16 @@ restartUndo(transTable) {
 
 **Parallelisataion of data restore after crash**
 
-Time of speed of data restore is critical for applications which relyes on database high avalaibility. 
+Time of data restore is critical for applications which rely on database high availability. 
 There are two approaches how time of data restore can be decreased:
 
 1. Minimize amount of pages which can be accessed during data restore.
 2. Restore transaction in parallel threads.
 
-In "redo pass" is only limitation is that all changes applyed to the pages have to be ordered.
-So during redo pass we may read all redo changes and partition actuall redo operations between different threads.
+In "redo pass" the only limitation is that all changes applied to the pages have to be ordered.
+So during redo pass, we may read all log records in a single thread and partition redo operations between different threads.
 
-In undo pass all CLR records from single transaction has to be changed so we may process undo operations in parallel too but all processing will be partitioned using entreis of transaction table.
-
+In undo pass all CLR records from single transaction has to be chained so we may process undo operations in parallel too but all processing will be partitioned using entries of transaction table.
 
 ##Alternatives:
 
