@@ -188,15 +188,15 @@ Log records contains following fields:
 
 **Pages**
 
-Each page contains the pageLSN field. Each page update looks like following:
+Each page contains the pageLSN and CRC32 fields. Each page update looks like following:
 
 1. Page lock is acquired.
 2. The page is changed.
 3. Page changes are logged into WAL.
 4. LSN of WAL record is set to pageLSN field.
 
-When buffer commits page to the disk, it checks that all records of WAL are flushed at least till the LSN stored in pageLSN.
-If that is not the true flush of WAL content is performed.
+When buffer flushes page to the disk, it checks that all records of WAL are flushed at least till the LSN stored in pageLSN.
+If that is not the true flush of WAL content is performed. During page flush CRC32 code for page content including pageLSN filed is calculated and assegned to the crc32 field. CRC32 field is used to detect whether page is partially flushed to the disk because of the process crash.
 
 **Transaction table**
 
