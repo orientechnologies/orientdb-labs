@@ -1,6 +1,6 @@
 **Summary:**
 
-Reallocate hot cluster records to the same pages with the help of Stream-Summary algorithm
+Reallocate hot records to the same pages with the help of Stream-Summary algorithm
 
 **Goals:**
 
